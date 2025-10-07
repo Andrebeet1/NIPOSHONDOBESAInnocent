@@ -1,10 +1,20 @@
+# Framework Flask
 Flask==2.3.3
 Flask-SQLAlchemy==3.0.5
+
+# Base de données PostgreSQL
 psycopg[binary,pool]==3.2.10
+
+# Template et utils
 Jinja2==3.1.2
-gunicorn==21.2.0
 Werkzeug==2.3.7
-pandas==2.1.1
-numpy==1.27.0
+gunicorn==21.2.0
+
+# Analyse de données
+pandas==2.3.3
+numpy==1.27.5
 matplotlib==3.8.0
-seaborn==0.12.2
+seaborn==0.12.3
+
+# Pour gérer les dates et heures si nécessaire
+python-dateutil==2.8.2
