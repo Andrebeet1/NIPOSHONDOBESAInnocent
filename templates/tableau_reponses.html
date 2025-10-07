@@ -5,6 +5,18 @@
 {% block content %}
 <h2 class="mb-4">Tableau des Réponses Complètes</h2>
 
+<!-- Bloc des messages d'alerte -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 <table class="table table-bordered table-sm table-striped">
     <thead class="thead-dark">
         <tr>
@@ -39,6 +51,7 @@
             <th>Raison Non Participation</th>
             <th>Enfant Maladie</th>
             <th>Nom Maladie</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -52,7 +65,7 @@
             <td>{{ reponse.niveau_etude }}</td>
             <td>{{ reponse.taille_menage }}</td>
             <td>{{ reponse.sexe_enfant }}</td>
-            <td>{{ reponse.profession_mere }}</td>
+            <td>{{ reponse.profession }}</td>
             <td>{{ reponse.connaissance_maladie }}</td>
             <td>{{ reponse.canal_information }}</td>
             <td>{{ reponse.signification_maladie }}</td>
@@ -75,6 +88,34 @@
             <td>{{ reponse.raison_non_participation }}</td>
             <td>{{ reponse.enfant_maladie }}</td>
             <td>{{ reponse.nom_maladie }}</td>
+
+            <!-- Bouton Supprimer avec modal Bootstrap -->
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ reponse.id }}">
+                    Supprimer
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="confirmDeleteModal{{ reponse.id }}" tabindex="-1" aria-labelledby="modalLabel{{ reponse.id }}" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel{{ reponse.id }}">Confirmer la suppression</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                      </div>
+                      <div class="modal-body">
+                        Voulez-vous vraiment supprimer cette réponse (ID: {{ reponse.id }}) ?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <form action="{{ url_for('delete_reponse', id=reponse.id) }}" method="POST">
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
