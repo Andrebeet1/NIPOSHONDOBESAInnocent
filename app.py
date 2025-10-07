@@ -11,7 +11,7 @@ db_url = os.getenv(
     "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
 )
 
-# Compatibilité psycopg3 (nouveau pilote)
+# Correction du préfixe pour compatibilité psycopg3
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
 elif db_url.startswith("postgresql://"):
@@ -106,7 +106,12 @@ def questionnaire():
 
 @app.route('/tableau')
 def tableau():
-    reponses = Reponse.query.all()
+    try:
+        reponses = Reponse.query.all()
+    except Exception as e:
+        # Si la table n’existe pas, on la crée automatiquement
+        db.create_all()
+        reponses = []
     return render_template('tableau_reponses.html', reponses=reponses)
 
 @app.route('/problemes_sanitaires')
@@ -125,7 +130,8 @@ def decisions_publiques():
 def merci():
     return render_template('merci.html')
 
+# --- Démarrage de l'application ---
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Crée la table si elle n'existe pas
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
