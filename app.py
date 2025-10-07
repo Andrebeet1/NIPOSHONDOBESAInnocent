@@ -135,7 +135,7 @@ def delete_reponse(reponse_id):
         flash("Erreur lors de la suppression.", "danger")
     return redirect(url_for('tableau'))
 
-# --- Route d'analyse comparative ---
+# --- Analyse comparative ---
 @app.route('/analyse_comparaison')
 def analyse_comparaison():
     reponses = Reponse.query.all()
@@ -146,32 +146,59 @@ def analyse_comparaison():
     # Transformation en DataFrame
     data = pd.DataFrame([{
         "sexe": r.sexe,
-        "statut_matrimonial": r.statut_matrimonial,
         "niveau_etude": r.niveau_etude,
-        "taille_menage": r.taille_menage,
-        "connaissance_traitement": r.connaissance_traitement,
-        "participation_travaux": r.participation_travaux
+        "participation_travaux": r.participation_travaux,
+        "connaissance_traitement": r.connaissance_traitement
     } for r in reponses])
 
-    # Exemple de graphique : répartition par sexe
-    fig, ax = plt.subplots(figsize=(6,4))
-    sns.countplot(x='sexe', data=data, ax=ax)
-    ax.set_title("Répartition des enquêtés par sexe")
+    def plot_to_base64(fig):
+        img = BytesIO()
+        fig.savefig(img, format='png', bbox_inches='tight')
+        img.seek(0)
+        return base64.b64encode(img.getvalue()).decode()
 
-    # Conversion du graphique en image base64 pour l'afficher dans HTML
-    img = BytesIO()
-    plt.savefig(img, format='png', bbox_inches='tight')
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode()
+    # Graphiques
+    # 1. Répartition par sexe
+    fig1, ax1 = plt.subplots()
+    sns.countplot(x='sexe', data=data, ax=ax1)
+    ax1.set_title("Répartition par sexe")
+    plot_sexe = plot_to_base64(fig1)
+    plt.close(fig1)
 
-    return render_template('analyse_comparaison.html', plot_url=plot_url)
+    # 2. Répartition par niveau d’étude
+    fig2, ax2 = plt.subplots()
+    sns.countplot(x='niveau_etude', data=data, ax=ax2)
+    ax2.set_title("Répartition par niveau d’étude")
+    plot_etude = plot_to_base64(fig2)
+    plt.close(fig2)
 
-# --- Autres pages ---
+    # 3. Participation aux travaux selon le sexe
+    fig3, ax3 = plt.subplots()
+    sns.countplot(x='participation_travaux', hue='sexe', data=data, ax=ax3)
+    ax3.set_title("Participation aux travaux selon le sexe")
+    plot_participation_sexe = plot_to_base64(fig3)
+    plt.close(fig3)
+
+    # 4. Connaissance du traitement selon niveau d’étude
+    fig4, ax4 = plt.subplots()
+    sns.countplot(x='niveau_etude', hue='connaissance_traitement', data=data, ax=ax4)
+    ax4.set_title("Connaissance traitement selon niveau d’étude")
+    plot_traitement_etude = plot_to_base64(fig4)
+    plt.close(fig4)
+
+    return render_template(
+        'analyse_comparaison.html',
+        plot_sexe=plot_sexe,
+        plot_etude=plot_etude,
+        plot_participation_sexe=plot_participation_sexe,
+        plot_traitement_etude=plot_traitement_etude
+    )
+
 @app.route('/merci')
 def merci():
     return render_template('merci.html')
 
-# --- Démarrage de l'application ---
+# --- Démarrage ---
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
