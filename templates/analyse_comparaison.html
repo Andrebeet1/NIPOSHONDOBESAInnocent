@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Analyse Comparative{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary">Analyse Comparative des Réponses</h2>
+
+    <!-- 1️⃣ Connaissance des maladies selon le niveau d'étude -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            Connaissance des maladies selon le niveau d'étude
+        </div>
+        <div class="card-body">
+            {{ croisement1|safe }}
+            <img src="{{ graph1_url }}" class="img-fluid mt-3" alt="Graphique niveau d'étude vs connaissance maladies">
+        </div>
+    </div>
+
+    <!-- 2️⃣ Participation aux travaux communautaires selon la taille du ménage -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-success text-white">
+            Participation aux travaux communautaires selon la taille du ménage
+        </div>
+        <div class="card-body">
+            {{ croisement2|safe }}
+        </div>
+    </div>
+
+    <!-- 3️⃣ Incidence des maladies chez l’enfant selon l’eau insalubre -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-danger text-white">
+            Incidence des maladies chez l’enfant selon l’eau insalubre
+        </div>
+        <div class="card-body">
+            {{ croisement3|safe }}
+        </div>
+    </div>
+
+    <!-- 4️⃣ Astuce pour le mémoire -->
+    <div class="alert alert-info mt-4" role="alert">
+        Utilisez ces graphiques et tableaux pour discuter des différences et relations entre les variables. Ex. : "Les ménages avec un niveau d’étude supérieur ont plus de connaissances sur les maladies hydriques…"
+    </div>
+</div>
+{% endblock %}
