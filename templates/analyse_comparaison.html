@@ -1,45 +1,49 @@
 {% extends "base.html" %}
 
-{% block title %}Analyse comparative{% endblock %}
+{% block title %}Analyse Comparative{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Analyse comparative des réponses</h2>
+    <h2 class="mb-4">Analyse Comparative des Réponses</h2>
 
-    <!-- Flash messages -->
+    <!-- Affichage des flash messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-              {{ message }}
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-        {% endfor %}
-      {% endif %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
     {% endwith %}
 
     <div class="row">
         <div class="col-md-6 mb-4">
-            <h5>Répartition des enquêtés par sexe</h5>
-            <img src="data:image/png;base64,{{ plot_sexe }}" class="img-fluid border rounded shadow-sm">
+            <h5>Répartition par sexe</h5>
+            <img src="data:image/png;base64,{{ plot_sexe }}" class="img-fluid" alt="Répartition par sexe">
         </div>
+
         <div class="col-md-6 mb-4">
-            <h5>Répartition par niveau d’étude</h5>
-            <img src="data:image/png;base64,{{ plot_etude }}" class="img-fluid border rounded shadow-sm">
+            <h5>Niveau d'étude</h5>
+            <img src="data:image/png;base64,{{ plot_etude }}" class="img-fluid" alt="Niveau d'étude">
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6 mb-4">
             <h5>Participation aux travaux communautaires selon le sexe</h5>
-            <img src="data:image/png;base64,{{ plot_participation_sexe }}" class="img-fluid border rounded shadow-sm">
+            <img src="data:image/png;base64,{{ plot_participation_sexe }}" class="img-fluid" alt="Participation par sexe">
         </div>
+
         <div class="col-md-6 mb-4">
-            <h5>Connaissance du traitement de l’eau selon le niveau d’étude</h5>
-            <img src="data:image/png;base64,{{ plot_traitement_etude }}" class="img-fluid border rounded shadow-sm">
+            <h5>Connaissance du traitement de l'eau selon le niveau d'étude</h5>
+            <img src="data:image/png;base64,{{ plot_traitement_etude }}" class="img-fluid" alt="Traitement par niveau d'étude">
         </div>
     </div>
+
+    <p class="text-muted mt-3">Ces graphiques permettent d'observer les tendances et de réaliser une analyse comparative entre différentes variables importantes pour l'étude.</p>
 </div>
 {% endblock %}
