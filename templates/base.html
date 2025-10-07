@@ -17,6 +17,7 @@
 </head>
 <body>
 
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <a class="navbar-brand" href="{{ url_for('index') }}">Questionnaire Ibanda</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
@@ -24,22 +25,45 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Accueil</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('questionnaire') }}">Questionnaire</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('tableau') }}">Réponses</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('problemes_sanitaires') }}">Problèmes sanitaires</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('planification_locale') }}">Planification locale</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('decisions_publiques') }}">Décisions publiques</a></li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'questionnaire' %}active{% endif %}" href="{{ url_for('questionnaire') }}">Questionnaire</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'tableau' %}active{% endif %}" href="{{ url_for('tableau') }}">Réponses</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'analyse_comparaison' %}active{% endif %}" href="{{ url_for('analyse_comparaison') }}">Analyse comparative</a>
+            </li>
         </ul>
     </div>
 </nav>
 
+<!-- Container principal -->
 <div class="container mt-4">
+
+    <!-- Messages flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     {% block content %}
     <!-- Contenu spécifique à chaque page -->
     {% endblock %}
 </div>
 
+<!-- Footer -->
 <footer class="bg-light text-center text-muted py-3 mt-5">
     <p>© 2025 Questionnaire Ibanda — Projet de fin de cycle de NIPOSHO NDOBESA Innocent</p>
 </footer>
