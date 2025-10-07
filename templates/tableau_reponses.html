@@ -1,123 +1,103 @@
 {% extends "base.html" %}
 
-{% block title %}Réponses Complètes - Ibanda{% endblock %}
+{% block title %}Réponses Complètes{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">Tableau des Réponses Complètes</h2>
+<div class="container my-5">
 
-<!-- Bloc des messages d'alerte -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+    <h2 class="mb-4 text-center">Tableau des Réponses Complètes</h2>
 
-<table class="table table-bordered table-sm table-striped">
-    <thead class="thead-dark">
-        <tr>
-            <th>ID</th>
-            <th>Adresse</th>
-            <th>Sexe</th>
-            <th>Statut Matrimonial</th>
-            <th>Religion</th>
-            <th>Niveau Étude</th>
-            <th>Taille Ménage</th>
-            <th>Sexe Enfant</th>
-            <th>Profession Mère</th>
-            <th>Connaissance Maladie</th>
-            <th>Canal Information</th>
-            <th>Signification Maladie</th>
-            <th>Eau Insalubre</th>
-            <th>Maladies Connues</th>
-            <th>Connaissance Traitement</th>
-            <th>Moyens Traitement</th>
-            <th>Connaissance Lavage Mains</th>
-            <th>Moments Lavage</th>
-            <th>Sensibilisation Prévention</th>
-            <th>Canal Sensibilisation</th>
-            <th>Source Eau</th>
-            <th>Eau Traitee Source</th>
-            <th>Methode Traitement Source</th>
-            <th>Traitement Avant Consommation</th>
-            <th>Methode Traitement</th>
-            <th>Stockage Eau</th>
-            <th>Participation Travaux</th>
-            <th>Frequence Participation</th>
-            <th>Raison Non Participation</th>
-            <th>Enfant Maladie</th>
-            <th>Nom Maladie</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for reponse in reponses %}
-        <tr>
-            <td>{{ reponse.id }}</td>
-            <td>{{ reponse.adresse }}</td>
-            <td>{{ reponse.sexe }}</td>
-            <td>{{ reponse.statut_matrimonial }}</td>
-            <td>{{ reponse.religion }}</td>
-            <td>{{ reponse.niveau_etude }}</td>
-            <td>{{ reponse.taille_menage }}</td>
-            <td>{{ reponse.sexe_enfant }}</td>
-            <td>{{ reponse.profession }}</td>
-            <td>{{ reponse.connaissance_maladie }}</td>
-            <td>{{ reponse.canal_information }}</td>
-            <td>{{ reponse.signification_maladie }}</td>
-            <td>{{ reponse.eau_insalubre }}</td>
-            <td>{{ reponse.maladies_connues }}</td>
-            <td>{{ reponse.connaissance_traitement }}</td>
-            <td>{{ reponse.moyens_traitement }}</td>
-            <td>{{ reponse.connaissance_lavage_mains }}</td>
-            <td>{{ reponse.moments_lavage }}</td>
-            <td>{{ reponse.sensibilisation_prevention }}</td>
-            <td>{{ reponse.canal_sensibilisation }}</td>
-            <td>{{ reponse.source_eau }}</td>
-            <td>{{ reponse.eau_traitee_source }}</td>
-            <td>{{ reponse.methode_traitement_source }}</td>
-            <td>{{ reponse.traitement_avant_consommation }}</td>
-            <td>{{ reponse.methode_traitement }}</td>
-            <td>{{ reponse.stockage_eau }}</td>
-            <td>{{ reponse.participation_travaux }}</td>
-            <td>{{ reponse.frequence_participation }}</td>
-            <td>{{ reponse.raison_non_participation }}</td>
-            <td>{{ reponse.enfant_maladie }}</td>
-            <td>{{ reponse.nom_maladie }}</td>
-
-            <!-- Bouton Supprimer avec modal Bootstrap -->
-            <td>
-                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ reponse.id }}">
-                    Supprimer
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="confirmDeleteModal{{ reponse.id }}" tabindex="-1" aria-labelledby="modalLabel{{ reponse.id }}" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel{{ reponse.id }}">Confirmer la suppression</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                      </div>
-                      <div class="modal-body">
-                        Voulez-vous vraiment supprimer cette réponse (ID: {{ reponse.id }}) ?
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <form action="{{ url_for('delete_reponse', id=reponse.id) }}" method="POST">
-                            <button type="submit" class="btn btn-danger">Supprimer</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-            </td>
-        </tr>
+    <!-- Alertes Bootstrap -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+          </div>
         {% endfor %}
-    </tbody>
-</table>
+      {% endif %}
+    {% endwith %}
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Adresse</th>
+                <th>Sexe</th>
+                <th>Statut Matrimonial</th>
+                <th>Religion</th>
+                <th>Niveau Étude</th>
+                <th>Taille Ménage</th>
+                <th>Sexe Enfant</th>
+                <th>Profession Mère</th>
+                <th>Connaissance Maladie</th>
+                <th>Canal Info</th>
+                <th>Signification Maladie</th>
+                <th>Eau Insalubre</th>
+                <th>Maladies Connues</th>
+                <th>Connaissance Traitement</th>
+                <th>Moyens Traitement</th>
+                <th>Connaissance Lavage Mains</th>
+                <th>Moments Lavage</th>
+                <th>Sensibilisation Prévention</th>
+                <th>Canal Sensibilisation</th>
+                <th>Source Eau</th>
+                <th>Eau Traitee Source</th>
+                <th>Methode Traitement Source</th>
+                <th>Traitement Avant Consommation</th>
+                <th>Methode Traitement</th>
+                <th>Stockage Eau</th>
+                <th>Participation Travaux</th>
+                <th>Frequence Participation</th>
+                <th>Raison Non Participation</th>
+                <th>Enfant Maladie</th>
+                <th>Nom Maladie</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reponse in reponses %}
+            <tr>
+                <td>{{ reponse.id }}</td>
+                <td>{{ reponse.adresse }}</td>
+                <td>{{ reponse.sexe }}</td>
+                <td>{{ reponse.statut_matrimonial }}</td>
+                <td>{{ reponse.religion }}</td>
+                <td>{{ reponse.niveau_etude }}</td>
+                <td>{{ reponse.taille_menage }}</td>
+                <td>{{ reponse.sexe_enfant }}</td>
+                <td>{{ reponse.profession }}</td>
+                <td>{{ reponse.connaissance_maladie }}</td>
+                <td>{{ reponse.canal_information }}</td>
+                <td>{{ reponse.signification_maladie }}</td>
+                <td>{{ reponse.eau_insalubre }}</td>
+                <td>{{ reponse.maladies_connues }}</td>
+                <td>{{ reponse.connaissance_traitement }}</td>
+                <td>{{ reponse.moyens_traitement }}</td>
+                <td>{{ reponse.connaissance_lavage_mains }}</td>
+                <td>{{ reponse.moments_lavage }}</td>
+                <td>{{ reponse.sensibilisation_prevention }}</td>
+                <td>{{ reponse.canal_sensibilisation }}</td>
+                <td>{{ reponse.source_eau }}</td>
+                <td>{{ reponse.eau_traitee_source }}</td>
+                <td>{{ reponse.methode_traitement_source }}</td>
+                <td>{{ reponse.traitement_avant_consommation }}</td>
+                <td>{{ reponse.methode_traitement }}</td>
+                <td>{{ reponse.stockage_eau }}</td>
+                <td>{{ reponse.participation_travaux }}</td>
+                <td>{{ reponse.frequence_participation }}</td>
+                <td>{{ reponse.raison_non_participation }}</td>
+                <td>{{ reponse.enfant_maladie }}</td>
+                <td>{{ reponse.nom_maladie }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('delete_reponse', reponse_id=reponse.id) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette réponse ?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
