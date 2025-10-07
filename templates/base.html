@@ -35,7 +35,8 @@
                 <a class="nav-link {% if request.endpoint == 'tableau' %}active{% endif %}" href="{{ url_for('tableau') }}">Réponses</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if request.endpoint == 'analyse_comparaison' %}active{% endif %}" href="{{ url_for('analyse_comparaison') }}">Analyse comparative</a>
+                <!-- ✅ Correction ici -->
+                <a class="nav-link {% if request.endpoint == 'analyse' %}active{% endif %}" href="{{ url_for('analyse') }}">Analyse</a>
             </li>
         </ul>
     </div>
