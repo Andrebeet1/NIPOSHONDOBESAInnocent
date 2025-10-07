@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.secret_key = "ton_secret_key_ici"  # Nécessaire pour flash
+app.secret_key = "supersecretkey"  # nécessaire pour les flash messages
 
 # --- Configuration de la base de données ---
 db_url = os.getenv(
@@ -99,28 +99,35 @@ def questionnaire():
             enfant_maladie=request.form.get('child_waterborne_disease_contact'),
             nom_maladie=request.form.get('disease_name')
         )
-        db.session.add(data)
-        db.session.commit()
-        flash("✅ Réponse ajoutée avec succès.", "success")
-        return redirect(url_for('merci'))
+        try:
+            db.session.add(data)
+            db.session.commit()
+            flash("Réponse enregistrée avec succès !", "success")
+        except Exception:
+            db.session.rollback()
+            flash("Erreur lors de l’enregistrement.", "danger")
+        return redirect(url_for('questionnaire'))
     return render_template('questionnaire.html')
 
 @app.route('/tableau')
 def tableau():
     try:
         reponses = Reponse.query.all()
-    except Exception as e:
+    except Exception:
         db.create_all()
         reponses = []
     return render_template('tableau_reponses.html', reponses=reponses)
 
-# --- Route suppression avec alerte danger ---
-@app.route('/delete/<int:id>', methods=['POST'])
-def delete_reponse(id):
-    reponse = Reponse.query.get_or_404(id)
-    db.session.delete(reponse)
-    db.session.commit()
-    flash("⚠️ Réponse supprimée avec succès.", "danger")
+@app.route('/delete_reponse/<int:reponse_id>', methods=['POST'])
+def delete_reponse(reponse_id):
+    reponse = Reponse.query.get_or_404(reponse_id)
+    try:
+        db.session.delete(reponse)
+        db.session.commit()
+        flash("Réponse supprimée avec succès !", "success")
+    except Exception:
+        db.session.rollback()
+        flash("Erreur lors de la suppression.", "danger")
     return redirect(url_for('tableau'))
 
 @app.route('/problemes_sanitaires')
