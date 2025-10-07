@@ -1,11 +1,24 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
 # --- Configuration de la base de données ---
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Lecture automatique de DATABASE_URL fournie par Render
+db_url = os.getenv(
+    "DATABASE_URL",
+    "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
+)
+
+# Compatibilité psycopg3 (nouveau pilote)
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
+elif db_url.startswith("postgresql://"):
+    db_url = db_url.replace("postgresql://", "postgresql+psycopg://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
