@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Orienter la Planification Locale{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Orienter la Planification Locale</h2>
+    <p>
+        Cette section de l’application sert à exploiter les données collectées via le questionnaire pour orienter la planification sanitaire locale dans la Zone de Santé d’Ibanda.
+        L’objectif est d’aider les autorités locales et les acteurs de santé à prioriser les interventions et à mettre en place des stratégies efficaces.
+    </p>
+
+    <h4>Objectifs :</h4>
+    <ul>
+        <li>Analyser les réponses pour identifier les priorités sanitaires.</li>
+        <li>Déterminer les zones nécessitant une attention particulière.</li>
+        <li>Proposer des actions ciblées pour la prévention des maladies hydriques.</li>
+    </ul>
+
+    <h4>Outils :</h4>
+    <p>Des graphiques, statistiques et rapports générés à partir des données collectées permettront de guider la planification locale.</p>
+
+    <a href="{{ url_for('tableau') }}" class="btn btn-primary">Voir les réponses collectées</a>
+</div>
+{% endblock %}

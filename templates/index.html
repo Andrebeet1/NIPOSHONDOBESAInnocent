@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil - Questionnaire Ibanda{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Bienvenue sur le Questionnaire Ibanda</h1>
+    <p class="lead">
+        Ce projet a pour objectif de collecter des données fiables auprès des responsables de ménages dans la Zone de Santé d’Ibanda.
+    </p>
+    <hr class="my-4">
+    <p>
+        <strong>Philosophie :</strong><br>
+        Le questionnaire d’enquête auprès des responsables de ménages dans la Zone de Santé d’Ibanda
+        a pour rôle de <strong>collecter des données fiables</strong>, d’<strong>identifier les problèmes sanitaires</strong>,
+        d’<strong>orienter la planification locale</strong> et de <strong>soutenir les décisions de santé publique</strong>.
+    </p>
+    <p>
+        Ce projet est réalisé par <strong>NIPOSHO NDOBESA Innocent</strong>, étudiant à l’<strong>ISTM/Bukavu</strong>,
+        dans le cadre du travail de fin de cycle sur les
+        <strong>facteurs associés aux maladies d’origines hydriques chez les enfants de 0 à 59 mois</strong>.
+    </p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('questionnaire') }}" role="button">Commencer le questionnaire</a>
+</div>
+{% endblock %}

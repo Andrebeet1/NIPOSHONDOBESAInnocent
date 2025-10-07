@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Merci{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>Merci pour votre participation !</h2>
+    <p>
+        Votre contribution est précieuse pour améliorer la santé publique dans la Zone de Santé d’Ibanda.<br>
+        Les données collectées permettront d’identifier les problèmes sanitaires, d’orienter la planification locale
+        et de soutenir les décisions de santé publique.
+    </p>
+    <a href="{{ url_for('index') }}" class="btn btn-success">Retour à l'accueil</a>
+</div>
+{% endblock %}

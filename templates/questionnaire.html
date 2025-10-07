@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}Questionnaire{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">QUESTIONNAIRE D’ENQUÊTE</h2>
+    <p>Le questionnaire d’enquête auprès des responsables de ménages dans la Zone de Santé d’Ibanda a pour rôle de collecter des données fiables, identifier les problèmes sanitaires, orienter la planification locale et soutenir les décisions de santé publique.</p>
+
+    <form id="questionnaireForm">
+        <!-- I. Caractéristique sociodémographique -->
+        <h4>I. Caractéristique sociodémographique des enquêtés</h4>
+        <div class="form-group">
+            <label>1. Adresse de l’enquêté :</label>
+            <input type="text" class="form-control" name="address" required>
+        </div>
+        <div class="form-group">
+            <label>2. Sexe :</label>
+            <select class="form-control" name="gender" required>
+                <option value="Féminin">Féminin</option>
+                <option value="Masculin">Masculin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>3. Statut matrimonial :</label>
+            <select class="form-control" name="marital_status" required>
+                <option value="Marié(e)">Marié(e)</option>
+                <option value="Célibataire">Célibataire</option>
+                <option value="Divorcé(e)">Divorcé(e)</option>
+                <option value="Veuf(ve)">Veuf(ve)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>4. Religion :</label>
+            <select class="form-control" name="religion" required>
+                <option value="Catholique">Catholique</option>
+                <option value="Protestant(e)">Protestant(e)</option>
+                <option value="Musulman(e)">Musulman(e)</option>
+                <option value="Témoin de Jéhovah">Témoin de Jéhovah</option>
+                <option value="Kimbanguiste">Kimbanguiste</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>5. Niveau d’étude :</label>
+            <select class="form-control" name="education_level" required>
+                <option value="Sans niveau">Sans niveau</option>
+                <option value="Primaire">Primaire</option>
+                <option value="Secondaire">Secondaire</option>
+                <option value="Supérieur">Supérieur</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>6. Taille de ménage :</label>
+            <select class="form-control" name="household_size" required>
+                <option value="1-3">1-3</option>
+                <option value="4-6">4-6</option>
+                <option value="7-9">7-9</option>
+                <option value="10 et plus">10 et plus</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>7. Sexe de l’enfant :</label>
+            <select class="form-control" name="child_gender" required>
+                <option value="Féminin">Féminin</option>
+                <option value="Masculin">Masculin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>8. Profession de la mère :</label>
+            <select class="form-control" name="mother_profession" required>
+                <option value="Sans profession">Sans profession</option>
+                <option value="Étudiant(e)">Étudiant(e)</option>
+                <option value="Commerçant/Vendeur(se)">Commerçant/Vendeur(se)</option>
+                <option value="Agent de l’état">Agent de l’état</option>
+                <option value="Cultivateur(trice)">Cultivateur(trice)</option>
+                <option value="Emploi libéral">Emploi libéral</option>
+            </select>
+        </div>
+
+        <!-- II. Connaissance de la population -->
+        <h4>II. Connaissance de la population face à la prévention des maladies d’origine hydrique</h4>
+        <div class="form-group">
+            <label>9. Avez-vous déjà entendu parler des maladies d’origine hydrique ?</label>
+            <select class="form-control" name="heard_about_waterborne_diseases" required>
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>10. Si oui, par quel canal :</label>
+            <input type="text" class="form-control" name="info_channel">
+        </div>
+        <div class="form-group">
+            <label>11. Que signifie maladie hydrique ?</label>
+            <textarea class="form-control" name="waterborne_disease_meaning"></textarea>
+        </div>
+        <div class="form-group">
+            <label>12. Pensez-vous que la consommation d’une eau insalubre peut conduire aux maladies hydriques ?</label>
+            <select class="form-control" name="unsafe_water_leads_to_diseases" required>
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>13. Maladies hydriques connues :</label>
+            <textarea class="form-control" name="known_waterborne_diseases"></textarea>
+        </div>
+        <div class="form-group">
+            <label>14. Connaissez-vous au moins un moyen de traitement de l’eau ?</label>
+            <select class="form-control" name="know_water_treatment" required>
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>15. Moyens de traitement :</label>
+            <textarea class="form-control" name="water_treatment_methods"></textarea>
+        </div>
+        <div class="form-group">
+            <label>16. Connaissance lavage des mains :</label>
+            <select class="form-control" name="know_handwashing_moments" required>
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>17. Si Oui, lesquels :</label><br>
+            <input type="checkbox" name="moments_lavage" value="Après la toilette"> Après la toilette<br>
+            <input type="checkbox" name="moments_lavage" value="Avant de manger"> Avant de manger<br>
+            <input type="checkbox" name="moments_lavage" value="Avant la cuisson"> Avant la cuisson<br>
+            <input type="checkbox" name="moments_lavage" value="Après la cuisson"> Après la cuisson<br>
+            <input type="checkbox" name="moments_lavage" value="Avant l’allaitement"> Avant l’allaitement<br>
+        </div>
+        <div class="form-group">
+            <label>18. Sensibilisation prévention :</label>
+            <select class="form-control" name="awareness_on_prevention" required>
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>19. Canal de sensibilisation :</label>
+            <input type="text" class="form-control" name="awareness_channel">
+        </div>
+
+        <!-- III. Niveau de recours -->
+        <h4>III. Niveau de recours aux mesures</h4>
+        <div class="form-group">
+            <label>20. Source principale d’eau :</label>
+            <input type="text" class="form-control" name="water_supply_source" required>
+        </div>
+        <div class="form-group">
+            <label>21. Eau traitée au point de puisage :</label>
+            <select class="form-control" name="water_treatment_at_source" required>
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>22. Si Oui, comment :</label>
+            <input type="text" class="form-control" name="water_treatment_method">
+        </div>
+        <div class="form-group">
+            <label>23. Eau traitée avant consommation :</label>
+            <select class="form-control" name="treat_water_before_consumption" required>
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>24. Moyens de traitement :</label>
+            <input type="text" class="form-control" name="treatment_methods">
+        </div>
+        <div class="form-group">
+            <label>25. Stockage de l’eau :</label>
+            <input type="text" class="form-control" name="water_storage">
+        </div>
+        <div class="form-group">
+            <label>26. Participation aux travaux communautaires :</label>
+            <select class="form-control" name="community_work" required>
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>27. Fréquence de participation :</label>
+            <input type="text" class="form-control" name="community_work_frequency">
+        </div>
+        <div class="form-group">
+            <label>28. Raison de non-participation :</label>
+            <input type="text" class="form-control" name="reason_for_not_participating">
+        </div>
+
+        <!-- IV. Prévalence -->
+        <h4>IV. Prévalence des maladies d’origine hydrique</h4>
+        <div class="form-group">
+            <label>29. L’enfant a-t-il contacté une maladie hydrique :</label>
+            <select class="form-control" name="child_waterborne_disease_contact" required>
+                <option value="Oui">Oui</option>
+                <option value="Non">Non</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>30. Si Oui, laquelle :</label>
+            <input type="text" class="form-control" name="disease_name">
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Soumettre</button>
+    </form>
+</div>
+
+<script>
+$(document).ready(function(){
+    $('#questionnaireForm').on('submit', function(event){
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('questionnaire') }}",
+            data: $(this).serialize(),
+            success: function(){
+                alert("Réponse enregistrée avec succès !");
+                $('#questionnaireForm')[0].reset();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

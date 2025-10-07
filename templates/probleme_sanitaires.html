@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Identifier les Problèmes Sanitaires{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Identifier les Problèmes Sanitaires</h2>
+    <p>
+        Cette section de l’application vise à analyser les réponses collectées afin d’identifier les principaux problèmes sanitaires dans la Zone de Santé d’Ibanda.
+        L’objectif est de mettre en lumière les facteurs liés aux maladies d’origine hydrique et leur prévalence, afin de proposer des actions ciblées.
+    </p>
+
+    <h4>Données Clés :</h4>
+    <ul>
+        <li>Analyse des réponses sur la qualité de l’eau.</li>
+        <li>Identification des maladies hydriques les plus fréquentes.</li>
+        <li>Compréhension des habitudes sanitaires des ménages.</li>
+    </ul>
+
+    <h4>Statistiques :</h4>
+    <p>Une analyse statistique des données sera présentée ici pour aider les décideurs à comprendre les enjeux sanitaires.</p>
+
+    <a href="{{ url_for('tableau') }}" class="btn btn-primary">Voir les réponses collectées</a>
+</div>
+{% endblock %}

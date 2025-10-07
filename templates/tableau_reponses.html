@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Réponses Complètes - Ibanda{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Tableau des Réponses Complètes</h2>
+
+<table class="table table-bordered table-sm table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Adresse</th>
+            <th>Sexe</th>
+            <th>Statut Matrimonial</th>
+            <th>Religion</th>
+            <th>Niveau Étude</th>
+            <th>Taille Ménage</th>
+            <th>Sexe Enfant</th>
+            <th>Profession Mère</th>
+            <th>Connaissance Maladie</th>
+            <th>Canal Information</th>
+            <th>Signification Maladie</th>
+            <th>Eau Insalubre</th>
+            <th>Maladies Connues</th>
+            <th>Connaissance Traitement</th>
+            <th>Moyens Traitement</th>
+            <th>Connaissance Lavage Mains</th>
+            <th>Moments Lavage</th>
+            <th>Sensibilisation Prévention</th>
+            <th>Canal Sensibilisation</th>
+            <th>Source Eau</th>
+            <th>Eau Traitee Source</th>
+            <th>Methode Traitement Source</th>
+            <th>Traitement Avant Consommation</th>
+            <th>Methode Traitement</th>
+            <th>Stockage Eau</th>
+            <th>Participation Travaux</th>
+            <th>Frequence Participation</th>
+            <th>Raison Non Participation</th>
+            <th>Enfant Maladie</th>
+            <th>Nom Maladie</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reponse in reponses %}
+        <tr>
+            <td>{{ reponse.id }}</td>
+            <td>{{ reponse.adresse }}</td>
+            <td>{{ reponse.sexe }}</td>
+            <td>{{ reponse.statut_matrimonial }}</td>
+            <td>{{ reponse.religion }}</td>
+            <td>{{ reponse.niveau_etude }}</td>
+            <td>{{ reponse.taille_menage }}</td>
+            <td>{{ reponse.sexe_enfant }}</td>
+            <td>{{ reponse.profession_mere }}</td>
+            <td>{{ reponse.connaissance_maladie }}</td>
+            <td>{{ reponse.canal_information }}</td>
+            <td>{{ reponse.signification_maladie }}</td>
+            <td>{{ reponse.eau_insalubre }}</td>
+            <td>{{ reponse.maladies_connues }}</td>
+            <td>{{ reponse.connaissance_traitement }}</td>
+            <td>{{ reponse.moyens_traitement }}</td>
+            <td>{{ reponse.connaissance_lavage_mains }}</td>
+            <td>{{ reponse.moments_lavage }}</td>
+            <td>{{ reponse.sensibilisation_prevention }}</td>
+            <td>{{ reponse.canal_sensibilisation }}</td>
+            <td>{{ reponse.source_eau }}</td>
+            <td>{{ reponse.eau_traitee_source }}</td>
+            <td>{{ reponse.methode_traitement_source }}</td>
+            <td>{{ reponse.traitement_avant_consommation }}</td>
+            <td>{{ reponse.methode_traitement }}</td>
+            <td>{{ reponse.stockage_eau }}</td>
+            <td>{{ reponse.participation_travaux }}</td>
+            <td>{{ reponse.frequence_participation }}</td>
+            <td>{{ reponse.raison_non_participation }}</td>
+            <td>{{ reponse.enfant_maladie }}</td>
+            <td>{{ reponse.nom_maladie }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

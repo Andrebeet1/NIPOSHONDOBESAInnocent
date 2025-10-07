@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Soutenir les Décisions de Santé Publique{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Soutenir les Décisions de Santé Publique</h2>
+    <p>
+        Cette section vise à utiliser les résultats de l’enquête pour appuyer la prise de décision en santé publique dans la Zone de Santé d’Ibanda.
+        Les données collectées permettent aux décideurs de concevoir des politiques adaptées et de mettre en œuvre des interventions efficaces.
+    </p>
+
+    <h4>Objectifs :</h4>
+    <ul>
+        <li>Mettre en évidence les facteurs influençant les maladies d’origine hydrique.</li>
+        <li>Fournir des données fiables pour soutenir les décisions stratégiques.</li>
+        <li>Promouvoir des politiques sanitaires fondées sur les données.</li>
+    </ul>
+
+    <h4>Résultats attendus :</h4>
+    <p>
+        Des rapports détaillés et des statistiques seront générés afin d’orienter :
+        <ul>
+            <li>Les programmes de prévention</li>
+            <li>Les campagnes de sensibilisation</li>
+            <li>Les interventions ciblées sur le terrain</li>
+        </ul>
+    </p>
+
+    <a href="{{ url_for('tableau') }}" class="btn btn-primary">Voir les réponses collectées</a>
+</div>
+{% endblock %}

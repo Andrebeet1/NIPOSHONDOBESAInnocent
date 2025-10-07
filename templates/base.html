@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Questionnaire Ibanda{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- CSS personnalisé -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="{{ url_for('index') }}">Questionnaire Ibanda</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Accueil</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('questionnaire') }}">Questionnaire</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('tableau') }}">Réponses</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('problemes_sanitaires') }}">Problèmes sanitaires</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('planification_locale') }}">Planification locale</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('decisions_publiques') }}">Décisions publiques</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    {% block content %}
+    <!-- Contenu spécifique à chaque page -->
+    {% endblock %}
+</div>
+
+<footer class="bg-light text-center text-muted py-3 mt-5">
+    <p>© 2025 Questionnaire Ibanda — Projet de fin de cycle de NIPOSHO NDOBESA Innocent</p>
+</footer>
+
+</body>
+</html>
