@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from io import BytesIO
+import io
 import base64
 
 app = Flask(__name__)
@@ -16,7 +16,6 @@ db_url = os.getenv(
     "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
 )
 
-# Correction du préfixe pour compatibilité psycopg3
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
 elif db_url.startswith("postgresql://"):
@@ -135,56 +134,44 @@ def delete_reponse(reponse_id):
         flash("Erreur lors de la suppression.", "danger")
     return redirect(url_for('tableau'))
 
-# --- Analyse comparative ---
-@app.route('/analyse_comparaison')
-def analyse_comparaison():
+@app.route('/analyse')
+def analyse():
     reponses = Reponse.query.all()
     if not reponses:
         flash("Aucune donnée disponible pour l'analyse.", "warning")
         return redirect(url_for('tableau'))
 
-    # Transformation en DataFrame
     data = pd.DataFrame([{
-        "sexe": r.sexe,
-        "niveau_etude": r.niveau_etude,
-        "participation_travaux": r.participation_travaux,
-        "connaissance_traitement": r.connaissance_traitement
+        'sexe': r.sexe,
+        'niveau_etude': r.niveau_etude,
+        'participation_travaux': r.participation_travaux,
+        'connaissance_traitement': r.connaissance_traitement
     } for r in reponses])
 
     def plot_to_base64(fig):
-        img = BytesIO()
-        fig.savefig(img, format='png', bbox_inches='tight')
-        img.seek(0)
-        return base64.b64encode(img.getvalue()).decode()
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', bbox_inches='tight')
+        buf.seek(0)
+        img_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
+        plt.close(fig)
+        return img_base64
 
     # Graphiques
-    # 1. Répartition par sexe
     fig1, ax1 = plt.subplots()
     sns.countplot(x='sexe', data=data, ax=ax1)
-    ax1.set_title("Répartition par sexe")
     plot_sexe = plot_to_base64(fig1)
-    plt.close(fig1)
 
-    # 2. Répartition par niveau d’étude
     fig2, ax2 = plt.subplots()
     sns.countplot(x='niveau_etude', data=data, ax=ax2)
-    ax2.set_title("Répartition par niveau d’étude")
     plot_etude = plot_to_base64(fig2)
-    plt.close(fig2)
 
-    # 3. Participation aux travaux selon le sexe
     fig3, ax3 = plt.subplots()
-    sns.countplot(x='participation_travaux', hue='sexe', data=data, ax=ax3)
-    ax3.set_title("Participation aux travaux selon le sexe")
+    sns.countplot(x='sexe', hue='participation_travaux', data=data, ax=ax3)
     plot_participation_sexe = plot_to_base64(fig3)
-    plt.close(fig3)
 
-    # 4. Connaissance du traitement selon niveau d’étude
     fig4, ax4 = plt.subplots()
     sns.countplot(x='niveau_etude', hue='connaissance_traitement', data=data, ax=ax4)
-    ax4.set_title("Connaissance traitement selon niveau d’étude")
     plot_traitement_etude = plot_to_base64(fig4)
-    plt.close(fig4)
 
     return render_template(
         'analyse_comparaison.html',
@@ -194,11 +181,7 @@ def analyse_comparaison():
         plot_traitement_etude=plot_traitement_etude
     )
 
-@app.route('/merci')
-def merci():
-    return render_template('merci.html')
-
-# --- Démarrage ---
+# --- Démarrage de l'application ---
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
