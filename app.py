@@ -1,6 +1,10 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+import pandas as pd
+import io
+import base64
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # nécessaire pour les flash messages
@@ -129,6 +133,52 @@ def delete_reponse(reponse_id):
         db.session.rollback()
         flash("Erreur lors de la suppression.", "danger")
     return redirect(url_for('tableau'))
+
+# --- Analyse comparative ---
+@app.route('/analyse_comparaison')
+def analyse_comparaison():
+    reponses = Reponse.query.all()
+
+    # Convertir en DataFrame
+    data = []
+    for r in reponses:
+        data.append({
+            "sexe": r.sexe,
+            "niveau_etude": r.niveau_etude,
+            "taille_menage": r.taille_menage,
+            "connaissance_maladie": r.connaissance_maladie,
+            "participation_travaux": r.participation_travaux,
+            "enfant_maladie": r.enfant_maladie
+        })
+    df = pd.DataFrame(data)
+
+    # Tableaux croisés
+    croisement1 = pd.crosstab(df['niveau_etude'], df['connaissance_maladie'], margins=True)
+    croisement2 = pd.crosstab(df['taille_menage'], df['participation_travaux'], margins=True)
+    croisement3 = pd.crosstab(df.get('eau_insalubre', pd.Series(['Oui']*len(df))), df['enfant_maladie'], margins=True)
+
+    # Graphique empilé : niveau d'étude vs connaissance des maladies
+    plt.figure(figsize=(8,5))
+    croisement1.iloc[:-1,:-1].plot(kind='bar', stacked=True, color=['skyblue','salmon'])
+    plt.title("Connaissance des maladies selon le niveau d'étude")
+    plt.ylabel("Nombre de réponses")
+    plt.xlabel("Niveau d'étude")
+    plt.tight_layout()
+
+    buf1 = io.BytesIO()
+    plt.savefig(buf1, format='png')
+    buf1.seek(0)
+    graph1_url = base64.b64encode(buf1.getvalue()).decode()
+    buf1.close()
+    graph1_url = 'data:image/png;base64,' + graph1_url
+
+    return render_template(
+        'analyse_comparaison.html',
+        croisement1=croisement1.to_html(classes='table table-bordered table-sm table-striped'),
+        croisement2=croisement2.to_html(classes='table table-bordered table-sm table-striped'),
+        croisement3=croisement3.to_html(classes='table table-bordered table-sm table-striped'),
+        graph1_url=graph1_url
+    )
 
 @app.route('/problemes_sanitaires')
 def problemes_sanitaires():
