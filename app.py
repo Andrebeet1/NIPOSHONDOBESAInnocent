@@ -1,11 +1,11 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.secret_key = "ton_secret_key_ici"  # Nécessaire pour flash
 
 # --- Configuration de la base de données ---
-# Lecture automatique de DATABASE_URL fournie par Render
 db_url = os.getenv(
     "DATABASE_URL",
     "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
@@ -101,6 +101,7 @@ def questionnaire():
         )
         db.session.add(data)
         db.session.commit()
+        flash("✅ Réponse ajoutée avec succès.", "success")
         return redirect(url_for('merci'))
     return render_template('questionnaire.html')
 
@@ -109,10 +110,18 @@ def tableau():
     try:
         reponses = Reponse.query.all()
     except Exception as e:
-        # Si la table n’existe pas, on la crée automatiquement
         db.create_all()
         reponses = []
     return render_template('tableau_reponses.html', reponses=reponses)
+
+# --- Route suppression avec alerte danger ---
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete_reponse(id):
+    reponse = Reponse.query.get_or_404(id)
+    db.session.delete(reponse)
+    db.session.commit()
+    flash("⚠️ Réponse supprimée avec succès.", "danger")
+    return redirect(url_for('tableau'))
 
 @app.route('/problemes_sanitaires')
 def problemes_sanitaires():
@@ -133,5 +142,5 @@ def merci():
 # --- Démarrage de l'application ---
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Crée la table si elle n'existe pas
+        db.create_all()
     app.run(host='0.0.0.0', port=5000, debug=True)
