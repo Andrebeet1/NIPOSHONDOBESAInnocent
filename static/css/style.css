@@ -1,0 +1,128 @@
+/* style.css — style moderne type ChatGPT */
+
+/* --- Général --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f8fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* --- Conteneur principal --- */
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* --- Titres --- */
+h2, h4 {
+    font-weight: 600;
+}
+
+h4 {
+    margin-bottom: 20px;
+}
+
+/* --- Formulaire --- */
+form label {
+    font-weight: 500;
+    display: block;
+    margin-top: 15px;
+}
+
+form input[type="text"],
+form select,
+form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form select:focus,
+form textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.4);
+    outline: none;
+}
+
+/* --- Boutons --- */
+.btn-primary {
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+}
+
+/* --- Sections --- */
+.p-3 {
+    padding: 20px !important;
+}
+
+.mb-4 {
+    margin-bottom: 20px !important;
+}
+
+.rounded {
+    border-radius: 12px !important;
+}
+
+/* --- Cases à cocher et radios --- */
+.form-check-input {
+    margin-right: 10px;
+    accent-color: #3b82f6;
+}
+
+.form-check-label {
+    font-weight: 500;
+}
+
+/* --- Navbar --- */
+.navbar {
+    border-radius: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.4em;
+}
+
+.nav-link.active {
+    font-weight: bold;
+    color: white !important;
+}
+
+/* --- Alertes flash --- */
+.alert {
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* --- Footer --- */
+footer {
+    font-size: 14px;
+    background-color: #f1f3f5;
+    padding: 15px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+/* --- Transitions douces --- */
+input, select, textarea, button {
+    transition: all 0.3s ease;
+}
