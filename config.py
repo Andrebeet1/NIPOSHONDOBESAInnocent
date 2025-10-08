@@ -5,7 +5,7 @@ class Config:
     # Utilise DATABASE_URL depuis les variables d'environnement si défini
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DATABASE_URL",
-        "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
+        "postgresql+psycopg://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
     )
 
     # Désactive les notifications inutiles de SQLAlchemy
