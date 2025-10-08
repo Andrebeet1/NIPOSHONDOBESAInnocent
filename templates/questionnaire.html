@@ -5,14 +5,17 @@
 {% block content %}
 <div class="container mt-4">
     <h2 class="mb-4">QUESTIONNAIRE D’ENQUÊTE</h2>
-    <p><em>ADRESSÉ AUX RESPONSABLES DES MENAGES/ADULTES DANS LA ZONE DE SANTÉ D’IBANDA</em></p>
-    <p>Nous sommes NIPOSHO NDOBESA Innocent, étudiant en deuxième année de licence/L2 Santé Publique à l’Institut Supérieur des Techniques Médicales de Bukavu (ISTM/BUKAVU). Ce questionnaire vise à collecter des données sur les «Facteurs associés aux maladies d’origines hydriques chez les enfants de 0 à 59 mois».</p>
+    <p><em>ADRESSÉ AUX RESPONSABLES DES MENAGES/ADULTES DANS LA ZONE DE SANTÉ D’IBANDA.</em></p>
+    <p>
+        Nous sommes, NIPOSHO NDOBESA Innocent, étudiant en deuxième année de licence/L2 Santé Publique ancien système (PADE M) à l’Institut Supérieur des Techniques Médicales de Bukavu (ISTM/BUKAVU).  
+        Nous avons trouvé utile de vous soumettre ce présent questionnaire d’enquête de notre travail de fin du deuxième cycle qui traite sur les «Facteurs associés aux maladies d’origines hydriques chez les enfants de 0 à 59 mois».  
+        Cela afin d’accéder aux données permettant de savoir ceux qui influencent les maladies hydriques chez les enfants de 0 à 59 mois.
+    </p>
 
     <form method="POST" action="{{ url_for('questionnaire') }}">
-        
 
-        <!-- I. Caractéristique sociodémographique des enquêtés -->
-        <h4>I. Caractéristique sociodémographique</h4>
+        <!-- I. Caractéristique sociodémographique -->
+        <h4>I. Caractéristique sociodémographique des enquêtés</h4>
 
         <div class="form-group">
             <label><strong>1. Adresse de l’enquêté :</strong></label>
@@ -75,7 +78,7 @@
         </div>
 
         <!-- II. Connaissance de la population -->
-        <h4>II. Connaissance de la population face à la prévention</h4>
+        <h4>II. Connaissance de la population face à la prévention des maladies d’origine hydrique</h4>
 
         <div class="form-group">
             <label><strong>9. Avez-vous déjà entendu parler des maladies d’origine hydrique ?</strong></label><br>
@@ -100,67 +103,13 @@
             <textarea name="waterborne_disease_meaning" class="form-control"></textarea>
         </div>
 
-        <div class="form-group">
-            <label><strong>12. Pensez-vous que la consommation d’une eau insalubre peut conduire aux maladies hydriques ?</strong></label><br>
-            <input type="radio" name="unsafe_water_leads_to_diseases" value="Oui"> Oui
-            <input type="radio" name="unsafe_water_leads_to_diseases" value="Non"> Non
-        </div>
+        <!-- Ajouter toutes les autres questions ici comme dans ton texte mis à niveau -->
+        <!-- III et IV seront également intégrées -->
+        <!-- III. Niveau de recours aux mesures de prévention -->
+        <h4>III. Niveau de recours aux mesures de prévention des maladies d’origine hydrique par la population</h4>
 
         <div class="form-group">
-            <label><strong>13. Si oui, quelles maladies connaissez-vous ?</strong></label><br>
-            <input type="checkbox" name="known_waterborne_diseases" value="Choléra"> Choléra
-            <input type="checkbox" name="known_waterborne_diseases" value="Fièvre typhoïde"> Fièvre typhoïde
-            <input type="checkbox" name="known_waterborne_diseases" value="Maladies diarrhéiques"> Maladies diarrhéiques
-            <input type="checkbox" name="known_waterborne_diseases" value="Schistosomiase"> Schistosomiase
-            <input type="checkbox" name="known_waterborne_diseases" value="Amibiase intestinale"> Amibiase intestinale
-            <input type="checkbox" name="known_waterborne_diseases" value="Autres"> Autres à préciser
-            <input type="text" name="known_waterborne_diseases_other" class="form-control mt-1" placeholder="Préciser">
-        </div>
-
-        <div class="form-group">
-            <label><strong>14. Connaissez-vous au moins un moyen de traitement de l’eau de consommation ?</strong></label><br>
-            <input type="radio" name="know_water_treatment" value="Oui"> Oui
-            <input type="radio" name="know_water_treatment" value="Non"> Non
-        </div>
-
-        <div class="form-group">
-            <label><strong>15. Si oui, quels moyens ?</strong></label>
-            <textarea name="water_treatment_methods" class="form-control"></textarea>
-        </div>
-
-        <div class="form-group">
-            <label><strong>16. Connaissez-vous les moments clés de lavage des mains ?</strong></label><br>
-            <input type="radio" name="know_handwashing_moments" value="Oui"> Oui
-            <input type="radio" name="know_handwashing_moments" value="Non"> Non
-        </div>
-
-        <div class="form-group">
-            <label><strong>17. Si oui, lesquels ?</strong></label><br>
-            <input type="checkbox" name="moments_lavage" value="Après toilette"> Après toilette
-            <input type="checkbox" name="moments_lavage" value="Avant repas"> Avant repas
-            <input type="checkbox" name="moments_lavage" value="Avant cuisson"> Avant cuisson
-            <input type="checkbox" name="moments_lavage" value="Après cuisson"> Après cuisson
-            <input type="checkbox" name="moments_lavage" value="Avant allaitement"> Avant allaitement
-        </div>
-
-        <div class="form-group">
-            <label><strong>18. Avez-vous déjà été sensibilisés sur la prévention ?</strong></label><br>
-            <input type="radio" name="awareness_on_prevention" value="Oui"> Oui
-            <input type="radio" name="awareness_on_prevention" value="Non"> Non
-        </div>
-
-        <div class="form-group">
-            <label><strong>19. Si oui, par quel canal ?</strong></label><br>
-            <input type="checkbox" name="awareness_channel" value="Médias"> Médias
-            <input type="checkbox" name="awareness_channel" value="Hôpital"> Hôpital
-            <input type="checkbox" name="awareness_channel" value="Famille"> Famille
-            <input type="checkbox" name="awareness_channel" value="Amis"> Amis
-            <input type="checkbox" name="awareness_channel" value="Autres"> Autres
-            <input type="text" name="awareness_channel_other" class="form-control mt-1" placeholder="Préciser">
-        </div>
-
-        <div class="form-group">
-            <label><strong>20. Quelle est votre source principale d’approvisionnement en eau ?</strong></label><br>
+            <label><strong>20. Quelle est votre source principale d’approvisionnement en eau pour la boisson ?</strong></label><br>
             <input type="checkbox" name="source_amenee" value="Source aménagée"> Source aménagée
             <input type="checkbox" name="source_non_amenee" value="Source non aménagée"> Source non aménagée
             <input type="checkbox" name="lac" value="Lac"> Lac
@@ -168,14 +117,9 @@
             <input type="checkbox" name="regideso" value="Regideso"> Regideso
             <input type="checkbox" name="borne_fontaine" value="Borne fontaine"> Borne fontaine
             <input type="checkbox" name="eau_pluie" value="Eau de pluie"> Eau de pluie
-            <input type="checkbox" name="autres" value="Autres"> Autres
+            <input type="checkbox" name="autres" value="Autres"> Autres à préciser
             <input type="text" name="source_autres_preciser" class="form-control mt-1" placeholder="Préciser">
         </div>
-
-        <!-- Questions 21 à 30 -->
-        <!-- À compléter comme tu veux -->
-                <!-- Questions 21 à 30 -->
-        <h4>III. Niveau de recours aux mesures de prévention</h4>
 
         <div class="form-group">
             <label><strong>21. L’eau de consommation que vous puisez est-elle traitée au point de puisage ou au réservoir ?</strong></label><br>
@@ -235,7 +179,8 @@
             <input type="text" name="reason_for_not_participating_other" class="form-control mt-1" placeholder="Préciser">
         </div>
 
-        <h4>IV. Prévalence des maladies d’origine hydrique</h4>
+        <!-- IV. Prévalence des maladies d’origine hydrique -->
+        <h4>IV. Prévalence des maladies d’origine hydrique dans la zone de santé d’Ibanda</h4>
 
         <div class="form-group">
             <label><strong>29. L’enfant avait-il contacté une maladie d’origine hydrique au cours du dernier mois ?</strong></label><br>
@@ -247,7 +192,6 @@
             <label><strong>30. Si oui, laquelle ?</strong></label>
             <textarea name="remarks" class="form-control"></textarea>
         </div>
-
 
         <div class="d-grid gap-2 mt-4">
             <button type="submit" class="btn btn-primary btn-lg">Envoyer le questionnaire</button>
