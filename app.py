@@ -122,14 +122,19 @@ def merci():
 
 @app.route('/tableau')
 def tableau():
-    reponses = Reponse.query.all()
-    return render_template('tableau_reponses.html', reponses=reponses)
+    try:
+        reponses = Reponse.query.all()
+        return render_template('tableau_reponses.html', reponses=reponses)
+    except Exception as e:
+        print(f"Erreur tableau : {e}")
+        flash(f"Erreur lors du chargement des données : {e}", "danger")
+        return redirect(url_for('index'))
 
 
 @app.route('/delete/<int:reponse_id>', methods=['POST'])
 def delete_reponse(reponse_id):
-    reponse = Reponse.query.get_or_404(reponse_id)
     try:
+        reponse = Reponse.query.get_or_404(reponse_id)
         db.session.delete(reponse)
         db.session.commit()
         flash("Réponse supprimée avec succès.", "success")
@@ -141,49 +146,56 @@ def delete_reponse(reponse_id):
 
 @app.route('/analyse')
 def analyse():
-    reponses = Reponse.query.all()
-    if not reponses:
-        flash("Aucune donnée disponible pour l'analyse.", "warning")
+    try:
+        reponses = Reponse.query.all()
+        if not reponses:
+            flash("Aucune donnée disponible pour l'analyse.", "warning")
+            return redirect(url_for('index'))
+
+        data = pd.DataFrame([r.__dict__ for r in reponses]).drop('_sa_instance_state', axis=1)
+
+        plt.figure(figsize=(5, 4))
+        sns.countplot(x='gender', data=data, palette='Set2')
+        plt.title("Répartition par sexe des répondants")
+        plt.xlabel("Sexe")
+        plt.ylabel("Nombre de répondants")
+
+        img = io.BytesIO()
+        plt.tight_layout()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plot_url = base64.b64encode(img.getvalue()).decode()
+
+        return render_template('analyse.html', plot_sexe=plot_url)
+    except Exception as e:
+        flash(f"Erreur lors de l'analyse : {e}", "danger")
         return redirect(url_for('index'))
-
-    data = pd.DataFrame([r.__dict__ for r in reponses]).drop('_sa_instance_state', axis=1)
-
-    plt.figure(figsize=(5, 4))
-    sns.countplot(x='gender', data=data, palette='Set2')
-    plt.title("Répartition par sexe des répondants")
-    plt.xlabel("Sexe")
-    plt.ylabel("Nombre de répondants")
-
-    img = io.BytesIO()
-    plt.tight_layout()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode()
-
-    return render_template('analyse.html', plot_sexe=plot_url)
 
 
 @app.route('/export_excel')
 def export_excel():
-    reponses = Reponse.query.all()
+    try:
+        reponses = Reponse.query.all()
+        if not reponses:
+            flash("Aucune donnée disponible pour l'export.", "warning")
+            return redirect(url_for('tableau'))
 
-    if not reponses:
-        flash("Aucune donnée disponible pour l'export.", "warning")
+        data = pd.DataFrame([r.__dict__ for r in reponses]).drop('_sa_instance_state', axis=1)
+
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine="openpyxl") as writer:
+            data.to_excel(writer, index=False, sheet_name="Réponses")
+        output.seek(0)
+
+        return send_file(
+            output,
+            as_attachment=True,
+            download_name="reponses_questionnaire.xlsx",
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+    except Exception as e:
+        flash(f"Erreur lors de l'export Excel : {e}", "danger")
         return redirect(url_for('tableau'))
-
-    data = pd.DataFrame([r.__dict__ for r in reponses]).drop('_sa_instance_state', axis=1)
-
-    output = io.BytesIO()
-    with pd.ExcelWriter(output, engine="openpyxl") as writer:
-        data.to_excel(writer, index=False, sheet_name="Réponses")
-    output.seek(0)
-
-    return send_file(
-        output,
-        as_attachment=True,
-        download_name="reponses_questionnaire.xlsx",
-        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
 
 
 with app.app_context():
