@@ -7,19 +7,18 @@ import seaborn as sns
 import io
 import base64
 
+from config import Config  # ⚡ Import de la configuration
+
 # -------------------------------------------------------
 # Initialisation de l'application Flask
 # -------------------------------------------------------
 app = Flask(__name__)
-app.config.from_object("config.Config")
+app.config.from_object(Config)  # ⚡ Charger la config
 
-# -------------------------------------------------------
-# Base de données
-# -------------------------------------------------------
 db = SQLAlchemy(app)
 
 # -------------------------------------------------------
-# Modèle de données
+# Modèle de la base de données
 # -------------------------------------------------------
 class Reponse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,7 +54,7 @@ class Reponse(db.Model):
     type_maladie = db.Column(db.String(200))
 
 # -------------------------------------------------------
-# Routes
+# Routes principales
 # -------------------------------------------------------
 @app.route('/')
 def index():
@@ -104,6 +103,7 @@ def questionnaire():
         except Exception as e:
             db.session.rollback()
             flash(f"Erreur lors de l'enregistrement : {e}", "danger")
+
     return render_template('questionnaire.html')
 
 @app.route('/merci')
@@ -145,8 +145,8 @@ with app.app_context():
     db.create_all()
 
 # -------------------------------------------------------
-# Lancement
+# Lancement de l'application
 # -------------------------------------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=Config.DEBUG)
