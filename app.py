@@ -7,64 +7,60 @@ import seaborn as sns
 import io
 import base64
 
+# -------------------------------------------------------
+# Initialisation de l'application Flask
+# -------------------------------------------------------
 app = Flask(__name__)
-app.secret_key = "supersecretkey"  # nécessaire pour les flash messages
+app.secret_key = "secret-key-ibanda"
 
-# --- Configuration de la base de données ---
-db_url = os.getenv(
-    "DATABASE_URL",
-    "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
-)
-
-if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
-elif db_url.startswith("postgresql://"):
-    db_url = db_url.replace("postgresql://", "postgresql+psycopg://", 1)
-
-app.config["SQLALCHEMY_DATABASE_URI"] = db_url
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# -------------------------------------------------------
+# Configuration de la base de données PostgreSQL
+# -------------------------------------------------------
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# --- Modèle de données ---
+# -------------------------------------------------------
+# Modèle de la base de données
+# -------------------------------------------------------
 class Reponse(db.Model):
-    __tablename__ = "reponses"
-
     id = db.Column(db.Integer, primary_key=True)
-    adresse = db.Column(db.String(255))
+    adresse = db.Column(db.String(200))
     sexe = db.Column(db.String(20))
     statut_matrimonial = db.Column(db.String(50))
     religion = db.Column(db.String(50))
     niveau_etude = db.Column(db.String(50))
     taille_menage = db.Column(db.String(50))
-    profession = db.Column(db.String(50))
-    connaissance_maladie = db.Column(db.String(10))
+    sexe_enfant = db.Column(db.String(20))
+    profession_mere = db.Column(db.String(100))
+    entendu_maladie_hydrique = db.Column(db.String(10))
     canal_information = db.Column(db.String(200))
-    signification_maladie = db.Column(db.Text)
-    eau_insalubre = db.Column(db.String(10))
-    maladies_connues = db.Column(db.Text)
-    connaissance_traitement = db.Column(db.String(10))
-    moyens_traitement = db.Column(db.Text)
+    definition_maladie_hydrique = db.Column(db.Text)
+    eau_insalubre_maladie = db.Column(db.String(10))
+    maladies_connues = db.Column(db.String(300))
+    connaissance_traitement_eau = db.Column(db.String(10))
+    moyens_traitement_eau = db.Column(db.Text)
     connaissance_lavage_mains = db.Column(db.String(10))
-    moments_lavage = db.Column(db.Text)
+    moments_lavage_mains = db.Column(db.String(300))
     sensibilisation_prevention = db.Column(db.String(10))
-    canal_sensibilisation = db.Column(db.String(200))
-    source_eau = db.Column(db.String(200))
-    eau_traitee_source = db.Column(db.String(10))
-    methode_traitement_source = db.Column(db.String(200))
-    traitement_avant_consommation = db.Column(db.String(10))
-    methode_traitement = db.Column(db.String(200))
+    canal_sensibilisation = db.Column(db.String(300))
+    source_eau = db.Column(db.String(300))
+    eau_traitee = db.Column(db.String(10))
+    mode_traitement = db.Column(db.String(200))
+    traitement_menage = db.Column(db.String(10))
+    methode_traitement_menage = db.Column(db.String(200))
     stockage_eau = db.Column(db.String(200))
     participation_travaux = db.Column(db.String(10))
-    frequence_participation = db.Column(db.String(200))
+    frequence_travaux = db.Column(db.String(100))
     raison_non_participation = db.Column(db.String(200))
-    enfant_maladie = db.Column(db.String(10))
-    nom_maladie = db.Column(db.String(200))
+    maladie_enfant = db.Column(db.String(10))
+    type_maladie = db.Column(db.String(200))
 
-    def __repr__(self):
-        return f"<Réponse {self.id}>"
+# -------------------------------------------------------
+# Routes principales
+# -------------------------------------------------------
 
-# --- Routes principales ---
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -72,117 +68,96 @@ def index():
 @app.route('/questionnaire', methods=['GET', 'POST'])
 def questionnaire():
     if request.method == 'POST':
-        data = Reponse(
-            adresse=request.form.get('address'),
-            sexe=request.form.get('gender'),
-            statut_matrimonial=request.form.get('marital_status'),
-            religion=request.form.get('religion'),
-            niveau_etude=request.form.get('education_level'),
-            taille_menage=request.form.get('household_size'),
-            profession=request.form.get('mother_profession'),
-            connaissance_maladie=request.form.get('heard_about_waterborne_diseases'),
-            canal_information=request.form.get('info_channel'),
-            signification_maladie=request.form.get('waterborne_disease_meaning'),
-            eau_insalubre=request.form.get('unsafe_water_leads_to_diseases'),
-            maladies_connues=request.form.get('known_waterborne_diseases'),
-            connaissance_traitement=request.form.get('know_water_treatment'),
-            moyens_traitement=request.form.get('water_treatment_methods'),
-            connaissance_lavage_mains=request.form.get('know_handwashing_moments'),
-            moments_lavage=",".join(request.form.getlist('moments_lavage')),
-            sensibilisation_prevention=request.form.get('awareness_on_prevention'),
-            canal_sensibilisation=request.form.get('awareness_channel'),
-            source_eau=request.form.get('water_supply_source'),
-            eau_traitee_source=request.form.get('water_treatment_at_source'),
-            methode_traitement_source=request.form.get('water_treatment_method'),
-            traitement_avant_consommation=request.form.get('treat_water_before_consumption'),
-            methode_traitement=request.form.get('treatment_methods'),
-            stockage_eau=request.form.get('water_storage'),
-            participation_travaux=request.form.get('community_work'),
-            frequence_participation=request.form.get('community_work_frequency'),
-            raison_non_participation=request.form.get('reason_for_not_participating'),
-            enfant_maladie=request.form.get('child_waterborne_disease_contact'),
-            nom_maladie=request.form.get('disease_name')
-        )
         try:
-            db.session.add(data)
+            reponse = Reponse(
+                adresse=request.form.get('adresse'),
+                sexe=request.form.get('sexe'),
+                statut_matrimonial=request.form.get('statut_matrimonial'),
+                religion=request.form.get('religion'),
+                niveau_etude=request.form.get('niveau_etude'),
+                taille_menage=request.form.get('taille_menage'),
+                sexe_enfant=request.form.get('sexe_enfant'),
+                profession_mere=request.form.get('profession_mere'),
+                entendu_maladie_hydrique=request.form.get('entendu_maladie_hydrique'),
+                canal_information=request.form.get('canal_information'),
+                definition_maladie_hydrique=request.form.get('definition_maladie_hydrique'),
+                eau_insalubre_maladie=request.form.get('eau_insalubre_maladie'),
+                maladies_connues="; ".join(request.form.getlist('maladies_connues')),
+                connaissance_traitement_eau=request.form.get('connaissance_traitement_eau'),
+                moyens_traitement_eau=request.form.get('moyens_traitement_eau'),
+                connaissance_lavage_mains=request.form.get('connaissance_lavage_mains'),
+                moments_lavage_mains="; ".join(request.form.getlist('moments_lavage_mains')),
+                sensibilisation_prevention=request.form.get('sensibilisation_prevention'),
+                canal_sensibilisation="; ".join(request.form.getlist('canal_sensibilisation')),
+                source_eau="; ".join(request.form.getlist('source_eau')),
+                eau_traitee=request.form.get('eau_traitee'),
+                mode_traitement=request.form.get('mode_traitement'),
+                traitement_menage=request.form.get('traitement_menage'),
+                methode_traitement_menage=request.form.get('methode_traitement_menage'),
+                stockage_eau=request.form.get('stockage_eau'),
+                participation_travaux=request.form.get('participation_travaux'),
+                frequence_travaux=request.form.get('frequence_travaux'),
+                raison_non_participation=request.form.get('raison_non_participation'),
+                maladie_enfant=request.form.get('maladie_enfant'),
+                type_maladie=request.form.get('type_maladie'),
+            )
+            db.session.add(reponse)
             db.session.commit()
-            flash("Réponse enregistrée avec succès !", "success")
-        except Exception:
+            flash("Merci ! Vos réponses ont été enregistrées avec succès.", "success")
+            return redirect(url_for('merci'))
+        except Exception as e:
             db.session.rollback()
-            flash("Erreur lors de l’enregistrement.", "danger")
-        return redirect(url_for('questionnaire'))
+            flash(f"Erreur lors de l'enregistrement : {e}", "danger")
+
     return render_template('questionnaire.html')
+
+@app.route('/merci')
+def merci():
+    return render_template('merci.html')
 
 @app.route('/tableau')
 def tableau():
-    try:
-        reponses = Reponse.query.all()
-    except Exception:
-        db.create_all()
-        reponses = []
-    return render_template('tableau_reponses.html', reponses=reponses)
+    reponses = Reponse.query.all()
+    return render_template('dashboard.html', reponses=reponses)
 
-@app.route('/delete_reponse/<int:reponse_id>', methods=['POST'])
-def delete_reponse(reponse_id):
-    reponse = Reponse.query.get_or_404(reponse_id)
-    try:
-        db.session.delete(reponse)
-        db.session.commit()
-        flash("Réponse supprimée avec succès !", "success")
-    except Exception:
-        db.session.rollback()
-        flash("Erreur lors de la suppression.", "danger")
-    return redirect(url_for('tableau'))
-
+# -------------------------------------------------------
+# Page d'analyse statistique
+# -------------------------------------------------------
 @app.route('/analyse')
 def analyse():
     reponses = Reponse.query.all()
     if not reponses:
         flash("Aucune donnée disponible pour l'analyse.", "warning")
-        return redirect(url_for('tableau'))
+        return redirect(url_for('index'))
 
-    data = pd.DataFrame([{
-        'sexe': r.sexe,
-        'niveau_etude': r.niveau_etude,
-        'participation_travaux': r.participation_travaux,
-        'connaissance_traitement': r.connaissance_traitement
-    } for r in reponses])
+    # Conversion en DataFrame
+    data = pd.DataFrame([r.__dict__ for r in reponses])
+    data = data.drop('_sa_instance_state', axis=1)
 
-    def plot_to_base64(fig):
-        buf = io.BytesIO()
-        fig.savefig(buf, format='png', bbox_inches='tight')
-        buf.seek(0)
-        img_base64 = base64.b64encode(buf.getvalue()).decode('utf8')
-        plt.close(fig)
-        return img_base64
+    # Exemple : répartition des sexes
+    plt.figure(figsize=(5, 4))
+    sns.countplot(x='sexe', data=data, palette='Set2')
+    plt.title("Répartition par sexe des répondants")
+    plt.xlabel("Sexe")
+    plt.ylabel("Nombre de répondants")
 
-    # Graphiques
-    fig1, ax1 = plt.subplots()
-    sns.countplot(x='sexe', data=data, ax=ax1)
-    plot_sexe = plot_to_base64(fig1)
+    # Convertir le graphique en image encodée
+    img = io.BytesIO()
+    plt.tight_layout()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode()
 
-    fig2, ax2 = plt.subplots()
-    sns.countplot(x='niveau_etude', data=data, ax=ax2)
-    plot_etude = plot_to_base64(fig2)
+    return render_template('analyse.html', plot_url=plot_url)
 
-    fig3, ax3 = plt.subplots()
-    sns.countplot(x='sexe', hue='participation_travaux', data=data, ax=ax3)
-    plot_participation_sexe = plot_to_base64(fig3)
+# -------------------------------------------------------
+# Création de la base au premier lancement
+# -------------------------------------------------------
+with app.app_context():
+    db.create_all()
 
-    fig4, ax4 = plt.subplots()
-    sns.countplot(x='niveau_etude', hue='connaissance_traitement', data=data, ax=ax4)
-    plot_traitement_etude = plot_to_base64(fig4)
-
-    return render_template(
-        'analyse_comparaison.html',
-        plot_sexe=plot_sexe,
-        plot_etude=plot_etude,
-        plot_participation_sexe=plot_participation_sexe,
-        plot_traitement_etude=plot_traitement_etude
-    )
-
-# --- Démarrage de l'application ---
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+# -------------------------------------------------------
+# Lancement de l'application
+# -------------------------------------------------------
+if __name__ == "__main__":
+    app.run(debug=True)
