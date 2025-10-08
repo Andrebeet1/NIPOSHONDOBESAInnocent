@@ -114,6 +114,17 @@ def merci():
 def tableau():
     reponses = Reponse.query.all()
     return render_template('tableau_reponses.html', reponses=reponses)
+@app.route('/delete/<int:reponse_id>', methods=['POST'])
+def delete_reponse(reponse_id):
+    reponse = Reponse.query.get_or_404(reponse_id)  # Trouver la réponse par ID
+    try:
+        db.session.delete(reponse)  # Suppression complète
+        db.session.commit()
+        flash("Réponse supprimée avec succès.", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Erreur lors de la suppression : {e}", "danger")
+    return redirect(url_for('tableau'))
 
 
 @app.route('/analyse')
@@ -138,6 +149,7 @@ def analyse():
     plot_url = base64.b64encode(img.getvalue()).decode()
 
     return render_template('analyse.html', plot_sexe=plot_url)
+    
 
 # -------------------------------------------------------
 # Création de la base au premier lancement
