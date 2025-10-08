@@ -3,15 +3,18 @@
 {% block title %}Analyse Comparative{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Analyse Comparative des Réponses</h2>
+<div class="container mt-5">
 
-    <!-- Affichage des flash messages -->
+    <h2 class="mb-4 text-primary text-center">
+        <i class="fas fa-chart-bar"></i> Analyse Comparative des Réponses
+    </h2>
+
+    <!-- Alertes flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
+                <div class="alert alert-{{ category }} alert-dismissible fade show rounded shadow-sm" role="alert">
+                    <i class="fas fa-info-circle"></i> {{ message }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -21,29 +24,55 @@
     {% endwith %}
 
     <div class="row">
-        <div class="col-md-6 mb-4">
-            <h5>Répartition par sexe</h5>
-            <img src="data:image/png;base64,{{ plot_sexe }}" class="img-fluid" alt="Répartition par sexe">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card shadow-sm rounded">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-venus-mars"></i> Répartition par sexe</h5>
+                </div>
+                <div class="card-body">
+                    <img src="data:image/png;base64,{{ plot_sexe }}" class="img-fluid rounded" alt="Répartition par sexe">
+                </div>
+            </div>
         </div>
 
-        <div class="col-md-6 mb-4">
-            <h5>Niveau d'étude</h5>
-            <img src="data:image/png;base64,{{ plot_etude }}" class="img-fluid" alt="Niveau d'étude">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card shadow-sm rounded">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-graduation-cap"></i> Niveau d'étude</h5>
+                </div>
+                <div class="card-body">
+                    <img src="data:image/png;base64,{{ plot_etude }}" class="img-fluid rounded" alt="Niveau d'étude">
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-6 mb-4">
-            <h5>Participation aux travaux communautaires selon le sexe</h5>
-            <img src="data:image/png;base64,{{ plot_participation_sexe }}" class="img-fluid" alt="Participation par sexe">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card shadow-sm rounded">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-users"></i> Participation aux travaux communautaires selon le sexe</h5>
+                </div>
+                <div class="card-body">
+                    <img src="data:image/png;base64,{{ plot_participation_sexe }}" class="img-fluid rounded" alt="Participation par sexe">
+                </div>
+            </div>
         </div>
 
-        <div class="col-md-6 mb-4">
-            <h5>Connaissance du traitement de l'eau selon le niveau d'étude</h5>
-            <img src="data:image/png;base64,{{ plot_traitement_etude }}" class="img-fluid" alt="Traitement par niveau d'étude">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card shadow-sm rounded">
+                <div class="card-header bg-gradient-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-water"></i> Connaissance du traitement de l'eau selon le niveau d'étude</h5>
+                </div>
+                <div class="card-body">
+                    <img src="data:image/png;base64,{{ plot_traitement_etude }}" class="img-fluid rounded" alt="Traitement par niveau d'étude">
+                </div>
+            </div>
         </div>
     </div>
 
-    <p class="text-muted mt-3">Ces graphiques permettent d'observer les tendances et de réaliser une analyse comparative entre différentes variables importantes pour l'étude.</p>
+    <p class="text-muted mt-3 text-center">
+        Ces graphiques permettent d'observer les tendances et de réaliser une analyse comparative entre différentes variables importantes pour l'étude.
+    </p>
 </div>
 {% endblock %}
