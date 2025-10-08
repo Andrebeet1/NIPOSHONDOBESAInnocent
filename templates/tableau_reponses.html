@@ -11,6 +11,7 @@
     </div>
 
     {% if reponses %}
+    <div class="table-responsive">
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
@@ -23,15 +24,15 @@
                     <th>Taille ménage</th>
                     <th>Sexe enfant</th>
                     <th>Profession mère</th>
-                    <th>Avoir entendu parler</th>
+                    <th>Entendu maladie</th>
                     <th>Canal info</th>
-                    <th>Signification maladie hydrique</th>
-                    <th>Eau insalubre cause maladie</th>
+                    <th>Signification maladie</th>
+                    <th>Eau insalubre cause</th>
                     <th>Maladies connues</th>
-                    <th>Connaissance traitement eau</th>
-                    <th>Méthodes traitement eau</th>
-                    <th>Moment lavage mains</th>
-                    <th>Sensibilisation prévention</th>
+                    <th>Connaissance traitement</th>
+                    <th>Méthodes traitement</th>
+                    <th>Moments lavage</th>
+                    <th>Sensibilisation</th>
                     <th>Canal sensibilisation</th>
                     <th>Source aménagée</th>
                     <th>Source non aménagée</th>
@@ -44,13 +45,13 @@
                     <th>Préciser autres</th>
                     <th>Eau traitée au puisage</th>
                     <th>Méthode traitement puisage</th>
-                    <th>Traite eau avant consommation</th>
+                    <th>Traite avant consommation</th>
                     <th>Méthodes traitement consommation</th>
                     <th>Stockage eau</th>
                     <th>Travaux communautaires</th>
                     <th>Fréquence travaux</th>
                     <th>Raison non participation</th>
-                    <th>Maladie enfant dernier mois</th>
+                    <th>Maladie enfant</th>
                     <th>Remarques</th>
                     <th>Actions</th>
                 </tr>
@@ -59,43 +60,43 @@
                 {% for r in reponses %}
                 <tr>
                     <td>{{ r.id }}</td>
-                    <td>{{ r.address }}</td>
-                    <td>{{ r.gender }}</td>
-                    <td>{{ r.marital_status }}</td>
-                    <td>{{ r.religion }}</td>
-                    <td>{{ r.education_level }}</td>
-                    <td>{{ r.household_size }}</td>
-                    <td>{{ r.child_gender }}</td>
-                    <td>{{ r.mother_profession }}</td>
-                    <td>{{ r.heard_about_waterborne_diseases }}</td>
-                    <td>{{ r.info_channel }}</td>
-                    <td>{{ r.waterborne_disease_meaning }}</td>
-                    <td>{{ r.unsafe_water_leads_to_diseases }}</td>
-                    <td>{{ r.known_waterborne_diseases }}</td>
-                    <td>{{ r.know_water_treatment }}</td>
-                    <td>{{ r.water_treatment_methods }}</td>
-                    <td>{{ r.moments_lavage }}</td>
-                    <td>{{ r.awareness_on_prevention }}</td>
-                    <td>{{ r.awareness_channel }}</td>
-                    <td>{{ r.source_amenee }}</td>
-                    <td>{{ r.source_non_amenee }}</td>
-                    <td>{{ r.lac }}</td>
-                    <td>{{ r.riviere }}</td>
-                    <td>{{ r.regideso }}</td>
-                    <td>{{ r.borne_fontaine }}</td>
-                    <td>{{ r.eau_pluie }}</td>
-                    <td>{{ r.autres }}</td>
-                    <td>{{ r.autres_preciser }}</td>
-                    <td>{{ r.water_treatment_at_source }}</td>
-                    <td>{{ r.water_treatment_method }}</td>
-                    <td>{{ r.treat_water_before_consumption }}</td>
-                    <td>{{ r.treatment_methods }}</td>
-                    <td>{{ r.water_storage }}</td>
-                    <td>{{ r.community_work }}</td>
-                    <td>{{ r.community_work_frequency }}</td>
-                    <td>{{ r.reason_for_not_participating }}</td>
-                    <td>{{ r.local_water_committee }}</td>
-                    <td>{{ r.remarks }}</td>
+                    <td>{{ r.address or '' }}</td>
+                    <td>{{ r.gender or '' }}</td>
+                    <td>{{ r.marital_status or '' }}</td>
+                    <td>{{ r.religion or '' }}</td>
+                    <td>{{ r.education_level or '' }}</td>
+                    <td>{{ r.household_size or '' }}</td>
+                    <td>{{ r.child_gender or '' }}</td>
+                    <td>{{ r.mother_profession or '' }}</td>
+                    <td>{{ r.heard_about_waterborne_diseases or '' }}</td>
+                    <td>{{ r.info_channel or '' }}</td>
+                    <td>{{ r.waterborne_disease_meaning or '' }}</td>
+                    <td>{{ r.unsafe_water_leads_to_diseases or '' }}</td>
+                    <td>{{ r.known_waterborne_diseases or '' }}</td>
+                    <td>{{ r.know_water_treatment or '' }}</td>
+                    <td>{{ r.water_treatment_methods or '' }}</td>
+                    <td>{{ r.moments_lavage or '' }}</td>
+                    <td>{{ r.awareness_on_prevention or '' }}</td>
+                    <td>{{ r.awareness_channel or '' }}</td>
+                    <td>{{ r.source_amenee or '' }}</td>
+                    <td>{{ r.source_non_amenee or '' }}</td>
+                    <td>{{ r.lac or '' }}</td>
+                    <td>{{ r.riviere or '' }}</td>
+                    <td>{{ r.regideso or '' }}</td>
+                    <td>{{ r.borne_fontaine or '' }}</td>
+                    <td>{{ r.eau_pluie or '' }}</td>
+                    <td>{{ r.autres or '' }}</td>
+                    <td>{{ r.autres_preciser or '' }}</td>
+                    <td>{{ r.water_treatment_at_source or '' }}</td>
+                    <td>{{ r.water_treatment_method or '' }}</td>
+                    <td>{{ r.treat_water_before_consumption or '' }}</td>
+                    <td>{{ r.treatment_methods or '' }}</td>
+                    <td>{{ r.water_storage or '' }}</td>
+                    <td>{{ r.community_work or '' }}</td>
+                    <td>{{ r.community_work_frequency or '' }}</td>
+                    <td>{{ r.reason_for_not_participating or '' }}</td>
+                    <td>{{ r.local_water_committee or '' }}</td>
+                    <td>{{ r.remarks or '' }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('delete_reponse', reponse_id=r.id) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette réponse ?');">
                             <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
@@ -105,6 +106,7 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
     {% else %}
         <p>Aucune réponse enregistrée pour le moment.</p>
     {% endif %}
