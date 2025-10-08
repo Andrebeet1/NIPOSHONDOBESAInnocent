@@ -7,94 +7,87 @@ import seaborn as sns
 import io
 import base64
 
-from config import Config  # ⚡ Import de la configuration
+from config import Config
 
-# -------------------------------------------------------
-# Initialisation de l'application Flask
-# -------------------------------------------------------
 app = Flask(__name__)
-app.config.from_object(Config)  # ⚡ Charger la config
-
+app.config.from_object(Config)
 db = SQLAlchemy(app)
 
-# -------------------------------------------------------
-# Modèle de la base de données
-# -------------------------------------------------------
+
 class Reponse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    adresse = db.Column(db.String(200))
-    sexe = db.Column(db.String(20))
-    statut_matrimonial = db.Column(db.String(50))
+    address = db.Column(db.String(200))
+    gender = db.Column(db.String(20))
+    marital_status = db.Column(db.String(50))
     religion = db.Column(db.String(50))
-    niveau_etude = db.Column(db.String(50))
-    taille_menage = db.Column(db.String(50))
-    sexe_enfant = db.Column(db.String(20))
-    profession_mere = db.Column(db.String(100))
-    entendu_maladie_hydrique = db.Column(db.String(10))
-    canal_information = db.Column(db.String(200))
-    definition_maladie_hydrique = db.Column(db.Text)
-    eau_insalubre_maladie = db.Column(db.String(10))
-    maladies_connues = db.Column(db.String(300))
-    connaissance_traitement_eau = db.Column(db.String(10))
-    moyens_traitement_eau = db.Column(db.Text)
-    connaissance_lavage_mains = db.Column(db.String(10))
-    moments_lavage_mains = db.Column(db.String(300))
-    sensibilisation_prevention = db.Column(db.String(10))
-    canal_sensibilisation = db.Column(db.String(300))
-    source_eau = db.Column(db.String(300))
-    eau_traitee = db.Column(db.String(10))
-    mode_traitement = db.Column(db.String(200))
-    traitement_menage = db.Column(db.String(10))
-    methode_traitement_menage = db.Column(db.String(200))
-    stockage_eau = db.Column(db.String(200))
-    participation_travaux = db.Column(db.String(10))
-    frequence_travaux = db.Column(db.String(100))
-    raison_non_participation = db.Column(db.String(200))
-    maladie_enfant = db.Column(db.String(10))
-    type_maladie = db.Column(db.String(200))
+    education_level = db.Column(db.String(50))
+    household_size = db.Column(db.String(50))
+    child_gender = db.Column(db.String(20))
+    mother_profession = db.Column(db.String(100))
+    heard_about_waterborne_diseases = db.Column(db.String(10))
+    info_channel = db.Column(db.String(200))
+    waterborne_disease_meaning = db.Column(db.Text)
+    unsafe_water_leads_to_diseases = db.Column(db.String(10))
+    known_waterborne_diseases = db.Column(db.String(300))
+    know_water_treatment = db.Column(db.String(10))
+    water_treatment_methods = db.Column(db.Text)
+    know_handwashing_moments = db.Column(db.String(10))
+    moments_lavage = db.Column(db.String(300))
+    awareness_on_prevention = db.Column(db.String(10))
+    awareness_channel = db.Column(db.String(300))
+    water_supply_source = db.Column(db.String(200))
+    water_treatment_at_source = db.Column(db.String(10))
+    water_treatment_method = db.Column(db.String(200))
+    treat_water_before_consumption = db.Column(db.String(10))
+    treatment_methods = db.Column(db.String(300))
+    water_storage = db.Column(db.String(200))
+    community_work = db.Column(db.String(10))
+    community_work_frequency = db.Column(db.String(100))
+    reason_for_not_participating = db.Column(db.String(200))
+    local_water_committee = db.Column(db.String(10))
+    remarks = db.Column(db.Text)
 
-# -------------------------------------------------------
-# Routes principales
-# -------------------------------------------------------
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/questionnaire', methods=['GET', 'POST'])
 def questionnaire():
     if request.method == 'POST':
         try:
             reponse = Reponse(
-                adresse=request.form.get('adresse'),
-                sexe=request.form.get('sexe'),
-                statut_matrimonial=request.form.get('statut_matrimonial'),
+                address=request.form.get('address'),
+                gender=request.form.get('gender'),
+                marital_status=request.form.get('marital_status'),
                 religion=request.form.get('religion'),
-                niveau_etude=request.form.get('niveau_etude'),
-                taille_menage=request.form.get('taille_menage'),
-                sexe_enfant=request.form.get('sexe_enfant'),
-                profession_mere=request.form.get('profession_mere'),
-                entendu_maladie_hydrique=request.form.get('entendu_maladie_hydrique'),
-                canal_information=request.form.get('canal_information'),
-                definition_maladie_hydrique=request.form.get('definition_maladie_hydrique'),
-                eau_insalubre_maladie=request.form.get('eau_insalubre_maladie'),
-                maladies_connues="; ".join(request.form.getlist('maladies_connues')),
-                connaissance_traitement_eau=request.form.get('connaissance_traitement_eau'),
-                moyens_traitement_eau=request.form.get('moyens_traitement_eau'),
-                connaissance_lavage_mains=request.form.get('connaissance_lavage_mains'),
-                moments_lavage_mains="; ".join(request.form.getlist('moments_lavage_mains')),
-                sensibilisation_prevention=request.form.get('sensibilisation_prevention'),
-                canal_sensibilisation="; ".join(request.form.getlist('canal_sensibilisation')),
-                source_eau="; ".join(request.form.getlist('source_eau')),
-                eau_traitee=request.form.get('eau_traitee'),
-                mode_traitement=request.form.get('mode_traitement'),
-                traitement_menage=request.form.get('traitement_menage'),
-                methode_traitement_menage=request.form.get('methode_traitement_menage'),
-                stockage_eau=request.form.get('stockage_eau'),
-                participation_travaux=request.form.get('participation_travaux'),
-                frequence_travaux=request.form.get('frequence_travaux'),
-                raison_non_participation=request.form.get('raison_non_participation'),
-                maladie_enfant=request.form.get('maladie_enfant'),
-                type_maladie=request.form.get('type_maladie'),
+                education_level=request.form.get('education_level'),
+                household_size=request.form.get('household_size'),
+                child_gender=request.form.get('child_gender'),
+                mother_profession=request.form.get('mother_profession'),
+                heard_about_waterborne_diseases=request.form.get('heard_about_waterborne_diseases'),
+                info_channel=request.form.get('info_channel'),
+                waterborne_disease_meaning=request.form.get('waterborne_disease_meaning'),
+                unsafe_water_leads_to_diseases=request.form.get('unsafe_water_leads_to_diseases'),
+                known_waterborne_diseases="; ".join(request.form.getlist('known_waterborne_diseases')),
+                know_water_treatment=request.form.get('know_water_treatment'),
+                water_treatment_methods=request.form.get('water_treatment_methods'),
+                know_handwashing_moments=request.form.get('know_handwashing_moments'),
+                moments_lavage="; ".join(request.form.getlist('moments_lavage')),
+                awareness_on_prevention=request.form.get('awareness_on_prevention'),
+                awareness_channel="; ".join(request.form.getlist('awareness_channel')),
+                water_supply_source=request.form.get('water_supply_source'),
+                water_treatment_at_source=request.form.get('water_treatment_at_source'),
+                water_treatment_method=request.form.get('water_treatment_method'),
+                treat_water_before_consumption=request.form.get('treat_water_before_consumption'),
+                treatment_methods="; ".join(request.form.getlist('treatment_methods')),
+                water_storage=request.form.get('water_storage'),
+                community_work=request.form.get('community_work'),
+                community_work_frequency=request.form.get('community_work_frequency'),
+                reason_for_not_participating=request.form.get('reason_for_not_participating'),
+                local_water_committee=request.form.get('local_water_committee'),
+                remarks=request.form.get('remarks')
             )
             db.session.add(reponse)
             db.session.commit()
@@ -103,22 +96,25 @@ def questionnaire():
         except Exception as e:
             db.session.rollback()
             flash(f"Erreur lors de l'enregistrement : {e}", "danger")
-
     return render_template('questionnaire.html')
+
 
 @app.route('/merci')
 def merci():
     return render_template('merci.html')
 
+
 @app.route('/tableau')
 def tableau():
     reponses = Reponse.query.all()
     return render_template('tableau_reponses.html', reponses=reponses)
+
+
 @app.route('/delete/<int:reponse_id>', methods=['POST'])
 def delete_reponse(reponse_id):
-    reponse = Reponse.query.get_or_404(reponse_id)  # Trouver la réponse par ID
+    reponse = Reponse.query.get_or_404(reponse_id)
     try:
-        db.session.delete(reponse)  # Suppression complète
+        db.session.delete(reponse)
         db.session.commit()
         flash("Réponse supprimée avec succès.", "success")
     except Exception as e:
@@ -137,7 +133,7 @@ def analyse():
     data = pd.DataFrame([r.__dict__ for r in reponses]).drop('_sa_instance_state', axis=1)
 
     plt.figure(figsize=(5, 4))
-    sns.countplot(x='sexe', data=data, palette='Set2')
+    sns.countplot(x='gender', data=data, palette='Set2')
     plt.title("Répartition par sexe des répondants")
     plt.xlabel("Sexe")
     plt.ylabel("Nombre de répondants")
@@ -149,17 +145,12 @@ def analyse():
     plot_url = base64.b64encode(img.getvalue()).decode()
 
     return render_template('analyse.html', plot_sexe=plot_url)
-    
 
-# -------------------------------------------------------
-# Création de la base au premier lancement
-# -------------------------------------------------------
+
 with app.app_context():
     db.create_all()
 
-# -------------------------------------------------------
-# Lancement de l'application
-# -------------------------------------------------------
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=Config.DEBUG)
