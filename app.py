@@ -11,21 +11,15 @@ import base64
 # Initialisation de l'application Flask
 # -------------------------------------------------------
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "secret-key-ibanda")
+app.config.from_object("config.Config")
 
 # -------------------------------------------------------
-# Configuration de la base de données PostgreSQL
+# Base de données
 # -------------------------------------------------------
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    "DATABASE_URL",
-    "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
-)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 db = SQLAlchemy(app)
 
 # -------------------------------------------------------
-# Modèle de la base de données
+# Modèle de données
 # -------------------------------------------------------
 class Reponse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -61,7 +55,7 @@ class Reponse(db.Model):
     type_maladie = db.Column(db.String(200))
 
 # -------------------------------------------------------
-# Routes principales
+# Routes
 # -------------------------------------------------------
 @app.route('/')
 def index():
@@ -151,8 +145,8 @@ with app.app_context():
     db.create_all()
 
 # -------------------------------------------------------
-# Lancement de l'application
+# Lancement
 # -------------------------------------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)
