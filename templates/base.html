@@ -7,22 +7,16 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- CSS personnalisé -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
-    <!-- FontAwesome pour les icônes -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
-<body class="bg-light">
+<body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary shadow-sm">
-    <a class="navbar-brand font-weight-bold" href="{{ url_for('index') }}">
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary">
+    <a class="navbar-brand" href="{{ url_for('index') }}">
         <i class="fas fa-water"></i> Questionnaire Ibanda
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
@@ -32,37 +26,35 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">
-                    Accueil
+                    <i class="fas fa-home"></i> Accueil
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if request.endpoint == 'questionnaire' %}active{% endif %}" href="{{ url_for('questionnaire') }}">
-                    Questionnaire
+                    <i class="fas fa-edit"></i> Questionnaire
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if request.endpoint == 'tableau' %}active{% endif %}" href="{{ url_for('tableau') }}">
-                    Réponses
+                    <i class="fas fa-table"></i> Réponses
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if request.endpoint == 'analyse' %}active{% endif %}" href="{{ url_for('analyse') }}">
-                    Analyse
+                    <i class="fas fa-chart-bar"></i> Analyse
                 </a>
             </li>
         </ul>
     </div>
 </nav>
 
-<!-- Conteneur principal -->
+<!-- Contenu principal -->
 <div class="container mt-4">
-
-    <!-- Messages flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show rounded shadow-sm" role="alert">
-                    <i class="fas fa-info-circle"></i> {{ message }}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -71,13 +63,18 @@
         {% endif %}
     {% endwith %}
 
-    {% block content %}{% endblock %}
+    {% block content %}
+    <!-- Contenu spécifique -->
+    {% endblock %}
 </div>
 
 <!-- Footer -->
-<footer class="bg-white text-center text-muted py-3 shadow-sm mt-5 border-top">
-    <p class="mb-0">© 2025 <strong>NIPOSHO NDOBESA Innocent</strong> — Projet de fin de cycle ISTM Bukavu</p>
+<footer class="bg-light text-center text-muted py-3 mt-5">
+    <p><i class="fas fa-water"></i> © 2025 Questionnaire Ibanda — Projet de fin de cycle de NIPOSHO NDOBESA Innocent</p>
 </footer>
 
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
