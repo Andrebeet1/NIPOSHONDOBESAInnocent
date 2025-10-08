@@ -1,11 +1,11 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+import io
+import base64
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import io
-import base64
 
 from config import Config
 
@@ -16,8 +16,6 @@ db = SQLAlchemy(app)
 
 class Reponse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-
-    # Questions 1 à 20
     address = db.Column(db.String(200))
     gender = db.Column(db.String(20))
     marital_status = db.Column(db.String(50))
@@ -37,21 +35,23 @@ class Reponse(db.Model):
     moments_lavage = db.Column(db.String(300))
     awareness_on_prevention = db.Column(db.String(10))
     awareness_channel = db.Column(db.String(300))
-    water_supply_source = db.Column(db.String(300))
-
-    # Questions 21 à 30
+    source_amenee = db.Column(db.String(10))
+    source_non_amenee = db.Column(db.String(10))
+    lac = db.Column(db.String(10))
+    riviere = db.Column(db.String(10))
+    regideso = db.Column(db.String(10))
+    borne_fontaine = db.Column(db.String(10))
+    eau_pluie = db.Column(db.String(10))
+    autres = db.Column(db.String(10))
+    autres_preciser = db.Column(db.String(200))
     water_treatment_at_source = db.Column(db.String(10))
-    water_treatment_method = db.Column(db.String(300))
-    water_treatment_method_other = db.Column(db.String(200))
+    water_treatment_method = db.Column(db.String(200))
     treat_water_before_consumption = db.Column(db.String(10))
     treatment_methods = db.Column(db.String(300))
-    treatment_methods_other = db.Column(db.String(200))
     water_storage = db.Column(db.String(200))
-    water_storage_other = db.Column(db.String(200))
     community_work = db.Column(db.String(10))
     community_work_frequency = db.Column(db.String(100))
     reason_for_not_participating = db.Column(db.String(200))
-    reason_for_not_participating_other = db.Column(db.String(200))
     local_water_committee = db.Column(db.String(10))
     remarks = db.Column(db.Text)
 
@@ -85,20 +85,23 @@ def questionnaire():
                 moments_lavage="; ".join(request.form.getlist('moments_lavage')),
                 awareness_on_prevention=request.form.get('awareness_on_prevention'),
                 awareness_channel="; ".join(request.form.getlist('awareness_channel')),
-                water_supply_source="; ".join(request.form.getlist('water_supply_source')),
-
+                source_amenee=request.form.get('source_amenee'),
+                source_non_amenee=request.form.get('source_non_amenee'),
+                lac=request.form.get('lac'),
+                riviere=request.form.get('riviere'),
+                regideso=request.form.get('regideso'),
+                borne_fontaine=request.form.get('borne_fontaine'),
+                eau_pluie=request.form.get('eau_pluie'),
+                autres=request.form.get('autres'),
+                autres_preciser=request.form.get('autres_preciser'),
                 water_treatment_at_source=request.form.get('water_treatment_at_source'),
-                water_treatment_method="; ".join(request.form.getlist('water_treatment_method')),
-                water_treatment_method_other=request.form.get('water_treatment_method_other'),
+                water_treatment_method=request.form.get('water_treatment_method'),
                 treat_water_before_consumption=request.form.get('treat_water_before_consumption'),
                 treatment_methods="; ".join(request.form.getlist('treatment_methods')),
-                treatment_methods_other=request.form.get('treatment_methods_other'),
                 water_storage=request.form.get('water_storage'),
-                water_storage_other=request.form.get('water_storage_other'),
                 community_work=request.form.get('community_work'),
                 community_work_frequency=request.form.get('community_work_frequency'),
                 reason_for_not_participating=request.form.get('reason_for_not_participating'),
-                reason_for_not_participating_other=request.form.get('reason_for_not_participating_other'),
                 local_water_committee=request.form.get('local_water_committee'),
                 remarks=request.form.get('remarks')
             )
@@ -160,12 +163,33 @@ def analyse():
     return render_template('analyse.html', plot_sexe=plot_url)
 
 
+@app.route('/export_excel')
+def export_excel():
+    reponses = Reponse.query.all()
+
+    if not reponses:
+        flash("Aucune donnée disponible pour l'export.", "warning")
+        return redirect(url_for('tableau'))
+
+    data = pd.DataFrame([r.__dict__ for r in reponses]).drop('_sa_instance_state', axis=1)
+
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        data.to_excel(writer, index=False, sheet_name="Réponses")
+    output.seek(0)
+
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name="reponses_questionnaire.xlsx",
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+
 with app.app_context():
     db.create_all()
 
+
 if __name__ == "__main__":
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=Config.DEBUG)
