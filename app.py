@@ -113,7 +113,8 @@ def merci():
 @app.route('/tableau')
 def tableau():
     reponses = Reponse.query.all()
-    return render_template('dashboard.html', reponses=reponses)
+    return render_template('tableau_reponses.html', reponses=reponses)
+
 
 @app.route('/analyse')
 def analyse():
