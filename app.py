@@ -11,12 +11,15 @@ import base64
 # Initialisation de l'application Flask
 # -------------------------------------------------------
 app = Flask(__name__)
-app.secret_key = "secret-key-ibanda"
+app.secret_key = os.environ.get("SECRET_KEY", "secret-key-ibanda")
 
 # -------------------------------------------------------
 # Configuration de la base de données PostgreSQL
 # -------------------------------------------------------
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    "DATABASE_URL",
+    "postgresql://mwalimu_db_user:mWvIur0BPmkXJ2bZskADXaKemHOG2lQF@dpg-d3fae0j3fgac73b26t80-a/mwalimu_db"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -60,7 +63,6 @@ class Reponse(db.Model):
 # -------------------------------------------------------
 # Routes principales
 # -------------------------------------------------------
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -120,9 +122,6 @@ def tableau():
     reponses = Reponse.query.all()
     return render_template('dashboard.html', reponses=reponses)
 
-# -------------------------------------------------------
-# Page d'analyse statistique
-# -------------------------------------------------------
 @app.route('/analyse')
 def analyse():
     reponses = Reponse.query.all()
@@ -130,25 +129,21 @@ def analyse():
         flash("Aucune donnée disponible pour l'analyse.", "warning")
         return redirect(url_for('index'))
 
-    # Conversion en DataFrame
-    data = pd.DataFrame([r.__dict__ for r in reponses])
-    data = data.drop('_sa_instance_state', axis=1)
+    data = pd.DataFrame([r.__dict__ for r in reponses]).drop('_sa_instance_state', axis=1)
 
-    # Exemple : répartition des sexes
     plt.figure(figsize=(5, 4))
     sns.countplot(x='sexe', data=data, palette='Set2')
     plt.title("Répartition par sexe des répondants")
     plt.xlabel("Sexe")
     plt.ylabel("Nombre de répondants")
 
-    # Convertir le graphique en image encodée
     img = io.BytesIO()
     plt.tight_layout()
     plt.savefig(img, format='png')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
 
-    return render_template('analyse.html', plot_url=plot_url)
+    return render_template('analyse.html', plot_sexe=plot_url)
 
 # -------------------------------------------------------
 # Création de la base au premier lancement
@@ -160,4 +155,5 @@ with app.app_context():
 # Lancement de l'application
 # -------------------------------------------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
