@@ -1,33 +1,44 @@
-/* style.css — style moderne type ChatGPT */
+/* === STYLE GLOBAL === */
 
-/* --- Général --- */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f7f8fa;
     color: #333;
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
-/* --- Conteneur principal --- */
 .container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 30px auto;
     padding: 20px;
     background: white;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* --- Titres --- */
-h2, h4 {
+/* === TITRES === */
+h2, h4, h5 {
     font-weight: 600;
 }
 
-h4 {
+h2 {
+    color: #1f2937;
     margin-bottom: 20px;
+    text-align: center;
 }
 
-/* --- Formulaire --- */
+h4 {
+    margin-bottom: 15px;
+    color: #111827;
+}
+
+h5 {
+    font-weight: 500;
+}
+
+/* === FORMULAIRES === */
 form label {
     font-weight: 500;
     display: block;
@@ -53,7 +64,7 @@ form textarea:focus {
     outline: none;
 }
 
-/* --- Boutons --- */
+/* === BOUTONS === */
 .btn-primary {
     background: linear-gradient(90deg, #3b82f6, #2563eb);
     border: none;
@@ -68,30 +79,61 @@ form textarea:focus {
     background: linear-gradient(90deg, #2563eb, #3b82f6);
 }
 
-/* --- Sections --- */
-.p-3 {
-    padding: 20px !important;
+.btn-danger {
+    background: linear-gradient(90deg, #ef4444, #b91c1c);
+    border: none;
+    border-radius: 8px;
 }
 
-.mb-4 {
-    margin-bottom: 20px !important;
+.btn-danger:hover {
+    background: linear-gradient(90deg, #b91c1c, #ef4444);
 }
 
-.rounded {
-    border-radius: 12px !important;
+/* === TABLEAUX === */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-/* --- Cases à cocher et radios --- */
-.form-check-input {
-    margin-right: 10px;
-    accent-color: #3b82f6;
+table th, table td {
+    padding: 10px;
+    text-align: center;
 }
 
-.form-check-label {
-    font-weight: 500;
+table th {
+    background: #1f2937;
+    color: white;
 }
 
-/* --- Navbar --- */
+table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+/* === CARTES ET GRAPHES === */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-weight: bold;
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+    color: white;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.img-fluid {
+    border-radius: 8px;
+}
+
+/* === NAVBAR === */
 .navbar {
     border-radius: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -107,13 +149,13 @@ form textarea:focus {
     color: white !important;
 }
 
-/* --- Alertes flash --- */
+/* === ALERTES FLASH === */
 .alert {
     border-radius: 8px;
     font-weight: 500;
 }
 
-/* --- Footer --- */
+/* === FOOTER === */
 footer {
     font-size: 14px;
     background-color: #f1f3f5;
@@ -122,7 +164,9 @@ footer {
     text-align: center;
 }
 
-/* --- Transitions douces --- */
-input, select, textarea, button {
-    transition: all 0.3s ease;
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
 }
