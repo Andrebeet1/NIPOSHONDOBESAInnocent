@@ -1,7 +1,10 @@
-import os
 from app import db, app
 
 with app.app_context():
-    db.drop_all()  # Supprime toutes les tables
-    db.create_all()  # Crée toutes les tables
-    print("Base de données réinitialisée avec succès.")
+    print("❌ Suppression de toutes les tables...")
+    db.drop_all()
+    print("✅ Tables supprimées.")
+
+    print("🔄 Création des tables...")
+    db.create_all()
+    print("✅ Tables créées avec succès.")
