@@ -150,7 +150,10 @@ def analyse():
 with app.app_context():
     db.create_all()
 
-
 if __name__ == "__main__":
+    with app.app_context():
+        db.drop_all()  # Supprime toutes les tables
+        db.create_all()  # Crée toutes les tables
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=Config.DEBUG)
+
