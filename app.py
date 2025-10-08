@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 class Reponse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    # Partie enquête (questions 1 à 30)
+    # Questions 1 à 20
     address = db.Column(db.String(200))
     gender = db.Column(db.String(20))
     marital_status = db.Column(db.String(50))
@@ -37,35 +37,23 @@ class Reponse(db.Model):
     moments_lavage = db.Column(db.String(300))
     awareness_on_prevention = db.Column(db.String(10))
     awareness_channel = db.Column(db.String(300))
-    source_amenee = db.Column(db.String(10))
-    source_non_amenee = db.Column(db.String(10))
-    lac = db.Column(db.String(10))
-    riviere = db.Column(db.String(10))
-    regideso = db.Column(db.String(10))
-    borne_fontaine = db.Column(db.String(10))
-    eau_pluie = db.Column(db.String(10))
-    autres = db.Column(db.String(10))
-    autres_preciser = db.Column(db.String(200))
+    water_supply_source = db.Column(db.String(300))
+
+    # Questions 21 à 30
     water_treatment_at_source = db.Column(db.String(10))
-    water_treatment_method = db.Column(db.String(200))
+    water_treatment_method = db.Column(db.String(300))
+    water_treatment_method_other = db.Column(db.String(200))
     treat_water_before_consumption = db.Column(db.String(10))
     treatment_methods = db.Column(db.String(300))
+    treatment_methods_other = db.Column(db.String(200))
     water_storage = db.Column(db.String(200))
+    water_storage_other = db.Column(db.String(200))
     community_work = db.Column(db.String(10))
     community_work_frequency = db.Column(db.String(100))
     reason_for_not_participating = db.Column(db.String(200))
+    reason_for_not_participating_other = db.Column(db.String(200))
     local_water_committee = db.Column(db.String(10))
     remarks = db.Column(db.Text)
-
-    # Partie enquêteur (questions 31 à 38)
-    enqueteur_nom = db.Column(db.String(100))
-    enqueteur_date = db.Column(db.String(20))
-    enqueteur_lieu = db.Column(db.String(200))
-    enqueteur_heure_debut = db.Column(db.String(20))
-    enqueteur_heure_fin = db.Column(db.String(20))
-    enqueteur_observations = db.Column(db.Text)
-    enqueteur_signature = db.Column(db.String(200))
-    enqueteur_remarques = db.Column(db.Text)
 
 
 @app.route('/')
@@ -97,34 +85,22 @@ def questionnaire():
                 moments_lavage="; ".join(request.form.getlist('moments_lavage')),
                 awareness_on_prevention=request.form.get('awareness_on_prevention'),
                 awareness_channel="; ".join(request.form.getlist('awareness_channel')),
-                source_amenee=request.form.get('source_amenee'),
-                source_non_amenee=request.form.get('source_non_amenee'),
-                lac=request.form.get('lac'),
-                riviere=request.form.get('riviere'),
-                regideso=request.form.get('regideso'),
-                borne_fontaine=request.form.get('borne_fontaine'),
-                eau_pluie=request.form.get('eau_pluie'),
-                autres=request.form.get('autres'),
-                autres_preciser=request.form.get('autres_preciser'),
+                water_supply_source="; ".join(request.form.getlist('water_supply_source')),
+
                 water_treatment_at_source=request.form.get('water_treatment_at_source'),
-                water_treatment_method=request.form.get('water_treatment_method'),
+                water_treatment_method="; ".join(request.form.getlist('water_treatment_method')),
+                water_treatment_method_other=request.form.get('water_treatment_method_other'),
                 treat_water_before_consumption=request.form.get('treat_water_before_consumption'),
                 treatment_methods="; ".join(request.form.getlist('treatment_methods')),
+                treatment_methods_other=request.form.get('treatment_methods_other'),
                 water_storage=request.form.get('water_storage'),
+                water_storage_other=request.form.get('water_storage_other'),
                 community_work=request.form.get('community_work'),
                 community_work_frequency=request.form.get('community_work_frequency'),
                 reason_for_not_participating=request.form.get('reason_for_not_participating'),
+                reason_for_not_participating_other=request.form.get('reason_for_not_participating_other'),
                 local_water_committee=request.form.get('local_water_committee'),
-                remarks=request.form.get('remarks'),
-
-                enqueteur_nom=request.form.get('enqueteur_nom'),
-                enqueteur_date=request.form.get('enqueteur_date'),
-                enqueteur_lieu=request.form.get('enqueteur_lieu'),
-                enqueteur_heure_debut=request.form.get('enqueteur_heure_debut'),
-                enqueteur_heure_fin=request.form.get('enqueteur_heure_fin'),
-                enqueteur_observations=request.form.get('enqueteur_observations'),
-                enqueteur_signature=request.form.get('enqueteur_signature'),
-                enqueteur_remarques=request.form.get('enqueteur_remarques')
+                remarks=request.form.get('remarks')
             )
             db.session.add(reponse)
             db.session.commit()
@@ -133,7 +109,6 @@ def questionnaire():
         except Exception as e:
             db.session.rollback()
             flash(f"Erreur lors de l'enregistrement : {e}", "danger")
-
     return render_template('questionnaire.html')
 
 
