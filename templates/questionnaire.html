@@ -1,212 +1,245 @@
-on{% extends "base.html" %}
-{% block title %}Questionnaire Ibanda{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Questionnaire{% endblock %}
 
 {% block content %}
-<div class="container p-3 rounded shadow-sm">
-    <h2 class="text-primary mb-3">Questionnaire d’Enquête — Zone de Santé d’Ibanda</h2>
-    <p class="text-muted">Ce questionnaire vise à collecter des données sur les « Facteurs associés aux maladies d’origines hydriques chez les enfants de 0 à 59 mois ».</p>
+<div class="container mt-4">
+    <h2 class="mb-4">Questionnaire Ibanda</h2>
 
     <form method="POST" action="{{ url_for('questionnaire') }}">
-       
+        {{ csrf_token() }}
 
-        <!-- SECTION I -->
-        <div class="mb-4">
-            <h4>Caractéristiques sociodémographiques</h4>
+        <!-- Questions 1 à 8 -->
+        <div class="form-group">
+            <label><strong>1. Adresse :</strong></label>
+            <input type="text" name="address" class="form-control" required>
+        </div>
 
-            <label>1. Adresse de l’enquêté :</label>
-            <input type="text" class="form-control" name="address" required>
+        <div class="form-group">
+            <label><strong>2. Sexe :</strong></label><br>
+            <input type="radio" name="gender" value="Masculin"> Masculin
+            <input type="radio" name="gender" value="Féminin"> Féminin
+        </div>
 
-            <label>2. Sexe :</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="gender" value="Féminin" required><label class="form-check-label">Féminin</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="gender" value="Masculin"><label class="form-check-label">Masculin</label></div>
-
-            <label>3. Statut matrimonial :</label>
-            <select class="form-select" name="marital_status" required>
-                <option value="">-- Sélectionner --</option>
-                <option value="Marié(e)">Marié(e)</option>
+        <div class="form-group">
+            <label><strong>3. État civil :</strong></label>
+            <select name="marital_status" class="form-control">
                 <option value="Célibataire">Célibataire</option>
+                <option value="Marié(e)">Marié(e)</option>
                 <option value="Divorcé(e)">Divorcé(e)</option>
-                <option value="Veuf(Ve)">Veuf(Ve)</option>
+                <option value="Veuf/Veuve">Veuf/Veuve</option>
             </select>
+        </div>
 
-            <label>4. Religion :</label>
-            <select class="form-select" name="religion" required>
-                <option value="">-- Sélectionner --</option>
-                <option value="Catholique">Catholique</option>
-                <option value="Protestant(e)">Protestant(e)</option>
-                <option value="Musulman(e)">Musulman(e)</option>
-                <option value="Témoin de Jéhovah">Témoin de Jéhovah</option>
-                <option value="Kimbanguiste">Kimbanguiste</option>
-            </select>
+        <div class="form-group">
+            <label><strong>4. Religion :</strong></label>
+            <input type="text" name="religion" class="form-control">
+        </div>
 
-            <label>5. Niveau d’étude de la mère :</label>
-            <select class="form-select" name="education_level" required>
-                <option value="">-- Sélectionner --</option>
-                <option value="Sans niveau">Sans niveau</option>
+        <div class="form-group">
+            <label><strong>5. Niveau d’éducation :</strong></label>
+            <select name="education_level" class="form-control">
                 <option value="Primaire">Primaire</option>
                 <option value="Secondaire">Secondaire</option>
                 <option value="Supérieur">Supérieur</option>
             </select>
-
-            <label>6. Taille de ménage :</label>
-            <select class="form-select" name="household_size" required>
-                <option value="">-- Sélectionner --</option>
-                <option value="1-3">1-3</option>
-                <option value="4-6">4-6</option>
-                <option value="7-9">7-9</option>
-                <option value="10 et plus">10 et plus</option>
-            </select>
-
-            <label>7. Sexe de l’enfant :</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="child_gender" value="Féminin" required><label class="form-check-label">Féminin</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="child_gender" value="Masculin"><label class="form-check-label">Masculin</label></div>
-
-            <label>8. Profession de la mère :</label>
-            <select class="form-select" name="mother_profession" required>
-                <option value="">-- Sélectionner --</option>
-                <option value="Sans profession">Sans profession</option>
-                <option value="Etudiant(e)">Etudiant(e)</option>
-                <option value="Commerçant/Vendeur(se)">Commerçant/Vendeur(se)</option>
-                <option value="Agent de l'état">Agent de l'état</option>
-                <option value="Cultivateur(ce)">Cultivateur(ce)</option>
-                <option value="Emploi libéral">Emploi libéral</option>
-            </select>
         </div>
 
-        <!-- SECTION II -->
-        <div class="mb-4">
-            <h4>Connaissance de la population</h4>
-
-            <label>9. Avez-vous déjà entendu parler des maladies d’origine hydrique ?</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="heard_about_waterborne_diseases" value="Oui" required><label class="form-check-label">Oui</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="heard_about_waterborne_diseases" value="Non"><label class="form-check-label">Non</label></div>
-
-            <label>10. Si oui, par quel canal :</label>
-            <select class="form-select" name="info_channel">
-                <option value="">-- Sélectionner --</option>
-                <option value="Radio">Radio</option>
-                <option value="Télévision">Télévision</option>
-                <option value="Personnel de santé">Personnel de santé</option>
-                <option value="Église">Église</option>
-                <option value="Au travail">Au travail</option>
-                <option value="Mon mari">Mon mari</option>
-                <option value="Autre">Autre</option>
-            </select>
-
-            <label>11. Que signifie maladie hydrique ?</label>
-            <textarea class="form-control" name="waterborne_disease_meaning" rows="2"></textarea>
-
-            <label>12. Pensez-vous que la consommation d’une eau insalubre peut conduire aux maladies hydriques ?</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="unsafe_water_leads_to_diseases" value="Oui" required><label class="form-check-label">Oui</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="unsafe_water_leads_to_diseases" value="Non"><label class="form-check-label">Non</label></div>
-
-            <label>13. Maladies connues :</label>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="known_waterborne_diseases" value="Choléra"> Choléra</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="known_waterborne_diseases" value="Fièvre typhoïde"> Fièvre typhoïde</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="known_waterborne_diseases" value="Maladies diarrhéiques"> Maladies diarrhéiques</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="known_waterborne_diseases" value="Schistosomiase"> Schistosomiase</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="known_waterborne_diseases" value="Amibiase intestinale"> Amibiase intestinale</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="known_waterborne_diseases" value="Autres"> Autres</div>
-
-            <label>14. Connaissez-vous au moins un moyen de traitement de l’eau ?</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="know_water_treatment" value="Oui"><label class="form-check-label">Oui</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="know_water_treatment" value="Non"><label class="form-check-label">Non</label></div>
-
-            <label>15. Si oui, précisez :</label>
-            <textarea class="form-control" name="water_treatment_methods" rows="2"></textarea>
-
-            <label>16. Connaissez-vous les moments clés du lavage des mains ?</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="know_handwashing_moments" value="Oui"><label class="form-check-label">Oui</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="know_handwashing_moments" value="Non"><label class="form-check-label">Non</label></div>
-
-            <label>17. Si oui, lesquels ?</label>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="moments_lavage" value="Après la toilette"> Après la toilette</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="moments_lavage" value="Avant de manger"> Avant de manger</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="moments_lavage" value="Avant la cuisson"> Avant la cuisson</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="moments_lavage" value="Après la cuisson"> Après la cuisson</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="moments_lavage" value="Avant l’allaitement"> Avant l’allaitement</div>
+        <div class="form-group">
+            <label><strong>6. Taille du ménage :</strong></label>
+            <input type="number" name="household_size" class="form-control" min="1">
         </div>
 
-        <!-- SECTION III & IV -->
-        <div class="mb-4">
-            <h4>Prévention et pratiques</h4>
+        <div class="form-group">
+            <label><strong>7. Sexe de l’enfant :</strong></label><br>
+            <input type="radio" name="child_gender" value="Masculin"> Masculin
+            <input type="radio" name="child_gender" value="Féminin"> Féminin
+        </div>
 
-            <label>18. Avez-vous déjà été sensibilisé sur la prévention ?</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="awareness_on_prevention" value="Oui"><label class="form-check-label">Oui</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="awareness_on_prevention" value="Non"><label class="form-check-label">Non</label></div>
+        <div class="form-group">
+            <label><strong>8. Profession de la mère :</strong></label>
+            <input type="text" name="mother_profession" class="form-control">
+        </div>
 
-            <label>19. Si oui, par quel canal :</label>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="awareness_channel" value="Médias"> Médias</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="awareness_channel" value="Hôpital"> Hôpital</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="awareness_channel" value="Famille"> Famille</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="awareness_channel" value="Amis"> Amis</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="awareness_channel" value="Autres"> Autres</div>
+        <!-- Questions 9 à 19 -->
+        <div class="form-group">
+            <label><strong>9. Avez-vous entendu parler des maladies hydriques ?</strong></label><br>
+            <input type="radio" name="heard_about_waterborne_diseases" value="Oui"> Oui
+            <input type="radio" name="heard_about_waterborne_diseases" value="Non"> Non
+        </div>
 
-            <label>20. Source principale d’approvisionnement en eau :</label>
-            <select class="form-select" name="water_supply_source">
-                <option value="">-- Sélectionner --</option>
-                <option value="Source aménagée">Source aménagée</option>
-                <option value="Source non aménagée">Source non aménagée</option>
-                <option value="Lac">Lac</option>
-                <option value="Rivière">Rivière</option>
-                <option value="Regideso">Regideso</option>
-                <option value="Borne fontaine">Borne fontaine</option>
-                <option value="Eau de pluie">Eau de pluie</option>
-                <option value="Autres">Autres</option>
-            </select>
+        <div class="form-group">
+            <label><strong>10. Canal d’information :</strong></label>
+            <input type="text" name="info_channel" class="form-control">
+        </div>
 
-            <label>21. L’eau est-elle traitée au point de puisage ?</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="water_treatment_at_source" value="Oui"><label class="form-check-label">Oui</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="water_treatment_at_source" value="Non"><label class="form-check-label">Non</label></div>
+        <div class="form-group">
+            <label><strong>11. Signification d’une maladie hydrique :</strong></label>
+            <textarea name="waterborne_disease_meaning" class="form-control"></textarea>
+        </div>
 
-            <label>22. Si oui, comment :</label>
-            <textarea class="form-control" name="water_treatment_method" rows="2"></textarea>
+        <div class="form-group">
+            <label><strong>12. L’eau non traitée entraîne-t-elle des maladies ?</strong></label><br>
+            <input type="radio" name="unsafe_water_leads_to_diseases" value="Oui"> Oui
+            <input type="radio" name="unsafe_water_leads_to_diseases" value="Non"> Non
+        </div>
 
-            <label>23. Traitez-vous l’eau avant consommation ?</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="treat_water_before_consumption" value="Oui"><label class="form-check-label">Oui</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="treat_water_before_consumption" value="Non"><label class="form-check-label">Non</label></div>
+        <div class="form-group">
+            <label><strong>13. Maladies hydriques connues :</strong></label><br>
+            <input type="checkbox" name="known_waterborne_diseases" value="Choléra"> Choléra<br>
+            <input type="checkbox" name="known_waterborne_diseases" value="Typhoïde"> Typhoïde<br>
+            <input type="checkbox" name="known_waterborne_diseases" value="Dysenterie"> Dysenterie<br>
+            <input type="checkbox" name="known_waterborne_diseases" value="Autres"> Autres
+        </div>
 
-            <label>24. Si oui, par quel moyen :</label>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="treatment_methods" value="Produits chimiques"> Produits chimiques</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="treatment_methods" value="Bouillir"> Bouillir</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="treatment_methods" value="Filtrage"> Filtrage</div>
-            <div class="form-check"><input class="form-check-input" type="checkbox" name="treatment_methods" value="Autres produits"> Autres produits</div>
+        <div class="form-group">
+            <label><strong>14. Connaissez-vous les méthodes de traitement de l’eau ?</strong></label><br>
+            <input type="radio" name="know_water_treatment" value="Oui"> Oui
+            <input type="radio" name="know_water_treatment" value="Non"> Non
+        </div>
 
-            <label>25. Mode de stockage de l’eau :</label>
-            <select class="form-select" name="water_storage">
+        <div class="form-group">
+            <label><strong>15. Méthodes de traitement de l’eau :</strong></label>
+            <textarea name="water_treatment_methods" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label><strong>16. Connaissance des moments de lavage des mains :</strong></label><br>
+            <input type="radio" name="know_handwashing_moments" value="Oui"> Oui
+            <input type="radio" name="know_handwashing_moments" value="Non"> Non
+        </div>
+
+        <div class="form-group">
+            <label><strong>17. Moments de lavage :</strong></label><br>
+            <input type="checkbox" name="moments_lavage" value="Avant repas"> Avant repas<br>
+            <input type="checkbox" name="moments_lavage" value="Après toilettes"> Après toilettes<br>
+            <input type="checkbox" name="moments_lavage" value="Après travail"> Après travail<br>
+            <input type="checkbox" name="moments_lavage" value="Autres"> Autres
+        </div>
+
+        <div class="form-group">
+            <label><strong>18. Sensibilisation à la prévention :</strong></label><br>
+            <input type="radio" name="awareness_on_prevention" value="Oui"> Oui
+            <input type="radio" name="awareness_on_prevention" value="Non"> Non
+        </div>
+
+        <div class="form-group">
+            <label><strong>19. Canal de sensibilisation :</strong></label><br>
+            <input type="checkbox" name="awareness_channel" value="Radio"> Radio<br>
+            <input type="checkbox" name="awareness_channel" value="Télévision"> Télévision<br>
+            <input type="checkbox" name="awareness_channel" value="Réseaux sociaux"> Réseaux sociaux<br>
+            <input type="checkbox" name="awareness_channel" value="Autres"> Autres
+        </div>
+
+        <!-- Questions 20 à 30 -->
+        <div class="form-group">
+            <label><strong>20. Source principale d’approvisionnement en eau :</strong></label><br>
+            <label>Source aménagée :</label>
+            <input type="radio" name="source_amenee" value="Oui"> Oui
+            <input type="radio" name="source_amenee" value="Non"> Non<br>
+
+            <label>Source non aménagée :</label>
+            <input type="radio" name="source_non_amenee" value="Oui"> Oui
+            <input type="radio" name="source_non_amenee" value="Non"> Non<br>
+
+            <label>Lac :</label>
+            <input type="radio" name="lac" value="Oui"> Oui
+            <input type="radio" name="lac" value="Non"> Non<br>
+
+            <label>Rivière :</label>
+            <input type="radio" name="riviere" value="Oui"> Oui
+            <input type="radio" name="riviere" value="Non"> Non<br>
+
+            <label>Regideso :</label>
+            <input type="radio" name="regideso" value="Oui"> Oui
+            <input type="radio" name="regideso" value="Non"> Non<br>
+
+            <label>Borne fontaine :</label>
+            <input type="radio" name="borne_fontaine" value="Oui"> Oui
+            <input type="radio" name="borne_fontaine" value="Non"> Non<br>
+
+            <label>Eau de pluie :</label>
+            <input type="radio" name="eau_pluie" value="Oui"> Oui
+            <input type="radio" name="eau_pluie" value="Non"> Non<br>
+
+            <label>Autres :</label>
+            <input type="radio" name="autres" value="Oui"> Oui
+            <input type="radio" name="autres" value="Non"> Non
+            <input type="text" name="autres_preciser" placeholder="Préciser" class="form-control mt-1">
+        </div>
+
+        <!-- Questions 21 à 30 -->
+        <div class="form-group">
+            <label><strong>21. L’eau est-elle traitée au point de puisage ?</strong></label><br>
+            <input type="radio" name="water_treatment_at_source" value="Oui"> Oui
+            <input type="radio" name="water_treatment_at_source" value="Non"> Non
+        </div>
+
+        <div class="form-group">
+            <label><strong>22. Si oui, comment :</strong></label>
+            <textarea name="water_treatment_method" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label><strong>23. Traitez-vous l’eau avant consommation ?</strong></label><br>
+            <input type="radio" name="treat_water_before_consumption" value="Oui"> Oui
+            <input type="radio" name="treat_water_before_consumption" value="Non"> Non
+        </div>
+
+        <div class="form-group">
+            <label><strong>24. Si oui, par quel moyen :</strong></label><br>
+            <input type="checkbox" name="treatment_methods" value="Produits chimiques"> Produits chimiques<br>
+            <input type="checkbox" name="treatment_methods" value="Bouillir"> Bouillir<br>
+            <input type="checkbox" name="treatment_methods" value="Filtrage"> Filtrage<br>
+            <input type="checkbox" name="treatment_methods" value="Autres produits"> Autres produits
+        </div>
+
+        <div class="form-group">
+            <label><strong>25. Mode de stockage de l’eau :</strong></label>
+            <select name="water_storage" class="form-control">
                 <option value="">-- Sélectionner --</option>
                 <option value="Bidons">Stockage dans des bidons</option>
                 <option value="Bouteilles">Dans des bouteilles</option>
                 <option value="Bassins">Dans des bassins</option>
                 <option value="Autres">Autres</option>
             </select>
-
-            <label>26. Participez-vous aux travaux communautaires ?</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="community_work" value="Oui"><label class="form-check-label">Oui</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="community_work" value="Non"><label class="form-check-label">Non</label></div>
-
-            <label>27. Si oui, fréquence :</label>
-            <input type="text" class="form-control" name="community_work_frequency">
-
-            <label>28. Si non, pourquoi :</label>
-            <select class="form-select" name="reason_for_not_participating">
-                <option value="">-- Sélectionner --</option>
-                <option value="Manque de temps">Manque de temps</option>
-                <option value="Manque d’intérêt">Manque d’intérêt</option>
-                <option value="Problème de santé">Problème de santé</option>
-                <option value="Autres">Autres</option>
-            </select>
-
-            <label>29. L'enfant avait constaté une maladie d'origine hydrique au cours de ce 1 mois passés ?</label>
-            <div class="form-check"><input class="form-check-input" type="radio" name="local_water_committee" value="Oui"><label class="form-check-label">Oui</label></div>
-            <div class="form-check"><input class="form-check-input" type="radio" name="local_water_committee" value="Non"><label class="form-check-label">Non</label></div>
-
-            <label>30. si oui, laquelle ? :</label>
-            <textarea class="form-control" name="remarks" rows="3"></textarea>
         </div>
 
-        <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary btn-lg">Envoyer le questionnaire</button>
+        <div class="form-group">
+            <label><strong>26. Participez-vous aux travaux communautaires ?</strong></label><br>
+            <input type="radio" name="community_work" value="Oui"> Oui
+            <input type="radio" name="community_work" value="Non"> Non
+        </div>
+
+        <div class="form-group">
+            <label><strong>27. Si Oui, combien de fois par mois, trimestre ou semestre ?</strong></label>
+            <input type="text" name="community_work_frequency" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label><strong>28. Si non, pourquoi :</strong></label>
+            <select name="reason_for_not_participating" class="form-control">
+                <option value="">-- Sélectionner --</option>
+                <option value="Manque de temps">Manque de temps</option>
+                <option value="L’activité n’est pas organisée">L’activité n’est pas organisée</option>
+                <option value="Manque de volonté">Manque de volonté</option>
+                <option value="Autres à préciser">Autres à préciser</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label><strong>29. L'enfant a-t-il eu une maladie hydrique durant le dernier mois ?</strong></label><br>
+            <input type="radio" name="local_water_committee" value="Oui"> Oui
+            <input type="radio" name="local_water_committee" value="Non"> Non
+        </div>
+
+        <div class="form-group">
+            <label><strong>30. Si oui, laquelle ?</strong></label>
+            <textarea name="remarks" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Envoyer le questionnaire</button>
         </div>
     </form>
 </div>
