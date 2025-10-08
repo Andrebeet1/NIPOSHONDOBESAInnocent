@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Tableau des Réponses{% endblock %}
+{% block title %}Tableau des Réponses Complètes{% endblock %}
 
 {% block content %}
 <h2 class="mb-4">Tableau des Réponses Complètes</h2>
@@ -19,6 +19,28 @@
                 <th>Taille du Ménage</th>
                 <th>Genre de l'enfant</th>
                 <th>Profession de la mère</th>
+                <th>Entendu sur maladies hydriques</th>
+                <th>Canal d'information</th>
+                <th>Signification maladies hydriques</th>
+                <th>Eau insalubre mène aux maladies</th>
+                <th>Maladies connues</th>
+                <th>Connaissance traitement eau</th>
+                <th>Méthodes de traitement eau</th>
+                <th>Connaissance moments lavage</th>
+                <th>Moments de lavage</th>
+                <th>Sensibilisation prévention</th>
+                <th>Canaux sensibilisation</th>
+                <th>Source d'eau</th>
+                <th>Traitement eau à la source</th>
+                <th>Méthode traitement source</th>
+                <th>Traite eau avant consommation</th>
+                <th>Méthodes traitement</th>
+                <th>Stockage eau</th>
+                <th>Travail communautaire</th>
+                <th>Fréquence travail communautaire</th>
+                <th>Raison non-participation</th>
+                <th>Comité local de l’eau</th>
+                <th>Remarques</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,10 +56,32 @@
                 <td>{{ r.household_size }}</td>
                 <td>{{ r.child_gender }}</td>
                 <td>{{ r.mother_profession }}</td>
+                <td>{{ r.heard_about_waterborne_diseases }}</td>
+                <td>{{ r.info_channel }}</td>
+                <td>{{ r.waterborne_disease_meaning }}</td>
+                <td>{{ r.unsafe_water_leads_to_diseases }}</td>
+                <td>{{ r.known_waterborne_diseases }}</td>
+                <td>{{ r.know_water_treatment }}</td>
+                <td>{{ r.water_treatment_methods }}</td>
+                <td>{{ r.know_handwashing_moments }}</td>
+                <td>{{ r.moments_lavage }}</td>
+                <td>{{ r.awareness_on_prevention }}</td>
+                <td>{{ r.awareness_channel }}</td>
+                <td>{{ r.water_supply_source }}</td>
+                <td>{{ r.water_treatment_at_source }}</td>
+                <td>{{ r.water_treatment_method }}</td>
+                <td>{{ r.treat_water_before_consumption }}</td>
+                <td>{{ r.treatment_methods }}</td>
+                <td>{{ r.water_storage }}</td>
+                <td>{{ r.community_work }}</td>
+                <td>{{ r.community_work_frequency }}</td>
+                <td>{{ r.reason_for_not_participating }}</td>
+                <td>{{ r.local_water_committee }}</td>
+                <td>{{ r.remarks }}</td>
                 <td>
                     <form action="{{ url_for('delete_reponse', reponse_id=r.id) }}" method="POST" style="display:inline;">
                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette réponse ?');">
-                            <i class="fas fa-trash"></i> Supprimer
+                            <i class="fas fa-trash"></i>
                         </button>
                     </form>
                 </td>
@@ -50,7 +94,7 @@
 <div class="alert alert-info">Aucune réponse enregistrée pour le moment.</div>
 {% endif %}
 
-<!-- DataTables Scripts -->
+<!-- DataTables CSS & JS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
