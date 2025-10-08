@@ -110,7 +110,6 @@ def questionnaire():
         except Exception as e:
             db.session.rollback()
             flash(f"Erreur lors de l'enregistrement : {e}", "danger")
-
     return render_template('questionnaire.html')
 
 @app.route('/merci')
@@ -156,4 +155,4 @@ with app.app_context():
 # -------------------------------------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port)
