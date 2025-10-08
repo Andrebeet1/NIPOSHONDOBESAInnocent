@@ -3,309 +3,275 @@
 {% block title %}Questionnaire{% endblock %}
 
 {% block content %}
-<div class="container my-5 p-4 shadow rounded" style="background-color: #f5f5f5; font-family: 'Segoe UI', sans-serif;">
-    <h2 class="mb-4 text-center text-dark">QUESTIONNAIRE D’ENQUÊTE - ZONE DE SANTÉ D’IBANDA</h2>
-    <p class="mb-4 text-secondary">
-        Ce questionnaire vise à collecter des données fiables, identifier les problèmes sanitaires, orienter la planification locale et soutenir les décisions de santé publique.
-    </p>
+<style>
+/* ======== STYLE MODERNE TYPE CHATGPT ======== */
+body {
+  background: #f9fafb;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #111827;
+}
 
-    <!-- Bloc messages d'alerte -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+.container-form {
+  max-width: 850px;
+  margin: 3rem auto;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.06);
+  padding: 2.5rem;
+  transition: all 0.3s ease;
+}
 
-    <form id="questionnaireForm" class="needs-validation" novalidate>
-        <!-- ================== I. Caractéristique sociodémographique ================== -->
-        <div class="p-3 mb-4 rounded" style="background-color: #e3f2fd;">
-            <h4 class="text-primary mb-3">I. Caractéristique sociodémographique</h4>
+.container-form:hover {
+  box-shadow: 0 8px 35px rgba(0,0,0,0.08);
+}
 
-            <div class="mb-3">
-                <label class="form-label">1. Adresse de l’enquêté :</label>
-                <input type="text" class="form-control border rounded" name="address" required>
-            </div>
+h2 {
+  text-align: center;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
 
-            <div class="mb-3">
-                <label class="form-label">2. Sexe :</label>
-                <select class="form-select border rounded" name="gender" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Féminin">Féminin</option>
-                    <option value="Masculin">Masculin</option>
-                </select>
-            </div>
+p.intro {
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 15px;
+}
 
-            <div class="mb-3">
-                <label class="form-label">3. Statut matrimonial :</label>
-                <select class="form-select border rounded" name="marital_status" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Marié(e)">Marié(e)</option>
-                    <option value="Célibataire">Célibataire</option>
-                    <option value="Divorcé(e)">Divorcé(e)</option>
-                    <option value="Veuf(ve)">Veuf(ve)</option>
-                </select>
-            </div>
+/* Section */
+.section {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 14px;
+  margin-bottom: 1.8rem;
+  transition: all 0.3s ease;
+}
+.section:hover {
+  background: #f1f5f9;
+}
 
-            <div class="mb-3">
-                <label class="form-label">4. Religion :</label>
-                <select class="form-select border rounded" name="religion" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Catholique">Catholique</option>
-                    <option value="Protestant(e)">Protestant(e)</option>
-                    <option value="Musulman(e)">Musulman(e)</option>
-                    <option value="Témoin de Jéhovah">Témoin de Jéhovah</option>
-                    <option value="Kimbanguiste">Kimbanguiste</option>
-                </select>
-            </div>
+/* Titres des sections */
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.4rem;
+  color: #2563eb;
+}
 
-            <div class="mb-3">
-                <label class="form-label">5. Niveau d’étude :</label>
-                <select class="form-select border rounded" name="education_level" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Sans niveau">Sans niveau</option>
-                    <option value="Primaire">Primaire</option>
-                    <option value="Secondaire">Secondaire</option>
-                    <option value="Supérieur">Supérieur</option>
-                </select>
-            </div>
+/* Champs de formulaire */
+.form-control, .form-select, textarea {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 14px;
+  width: 100%;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+}
+.form-control:focus, .form-select:focus, textarea:focus {
+  border-color: #2563eb;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+  outline: none;
+}
 
-            <div class="mb-3">
-                <label class="form-label">6. Taille de ménage :</label>
-                <select class="form-select border rounded" name="household_size" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="1-3">1-3</option>
-                    <option value="4-6">4-6</option>
-                    <option value="7-9">7-9</option>
-                    <option value="10 et plus">10 et plus</option>
-                </select>
-            </div>
+/* Label */
+label.form-label {
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
 
-            <div class="mb-3">
-                <label class="form-label">7. Sexe de l’enfant :</label>
-                <select class="form-select border rounded" name="child_gender" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Féminin">Féminin</option>
-                    <option value="Masculin">Masculin</option>
-                </select>
-            </div>
+/* Checkbox */
+input[type="checkbox"] {
+  accent-color: #2563eb;
+  margin-right: 5px;
+}
 
-            <div class="mb-3">
-                <label class="form-label">8. Profession de la mère :</label>
-                <select class="form-select border rounded" name="mother_profession" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Sans profession">Sans profession</option>
-                    <option value="Étudiant(e)">Étudiant(e)</option>
-                    <option value="Commerçant/Vendeur(se)">Commerçant/Vendeur(se)</option>
-                    <option value="Agent de l’état">Agent de l’état</option>
-                    <option value="Cultivateur(trice)">Cultivateur(trice)</option>
-                    <option value="Emploi libéral">Emploi libéral</option>
-                </select>
-            </div>
+/* Bouton principal */
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  font-weight: 600;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+.btn-submit:hover {
+  background: #1d4ed8;
+  transform: scale(1.02);
+}
+
+/* Alertes */
+.alert {
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+</style>
+
+<div class="container-form">
+  <h2>🩺 Questionnaire d’Enquête - Zone de Santé d’Ibanda</h2>
+  <p class="intro">
+    Ce questionnaire vise à collecter des données fiables pour identifier les problèmes sanitaires,
+    orienter la planification locale et soutenir les décisions de santé publique.
+  </p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show mt-2" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 
-        <!-- ================== II. Connaissance de la population ================== -->
-        <div class="p-3 mb-4 rounded" style="background-color: #fff3e0;">
-            <h4 class="text-warning mb-3">II. Connaissance de la population</h4>
+  <form id="questionnaireForm" class="needs-validation" novalidate>
+    <!-- ================== I. Caractéristiques sociodémographiques ================== -->
+    <div class="section">
+      <h4 class="section-title">I. Caractéristiques sociodémographiques</h4>
 
-            <div class="mb-3">
-                <label class="form-label">9. Avez-vous déjà entendu parler des maladies d’origine hydrique ?</label>
-                <select class="form-select border rounded" name="heard_about_waterborne_diseases" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Adresse :</label>
+        <input type="text" class="form-control" name="address" required>
+      </div>
 
-            <div class="mb-3">
-                <label class="form-label">10. Si oui, par quel canal :</label>
-                <input type="text" class="form-control border rounded" name="info_channel">
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Sexe :</label>
+        <select class="form-select" name="gender" required>
+          <option value="">-- Sélectionner --</option>
+          <option value="Féminin">Féminin</option>
+          <option value="Masculin">Masculin</option>
+        </select>
+      </div>
 
-            <div class="mb-3">
-                <label class="form-label">11. Que signifie maladie hydrique ?</label>
-                <textarea class="form-control border rounded" name="waterborne_disease_meaning"></textarea>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Statut matrimonial :</label>
+        <select class="form-select" name="marital_status" required>
+          <option value="">-- Sélectionner --</option>
+          <option value="Marié(e)">Marié(e)</option>
+          <option value="Célibataire">Célibataire</option>
+          <option value="Divorcé(e)">Divorcé(e)</option>
+          <option value="Veuf(ve)">Veuf(ve)</option>
+        </select>
+      </div>
 
-            <div class="mb-3">
-                <label class="form-label">12. Consommation d’eau insalubre → maladies hydriques ?</label>
-                <select class="form-select border rounded" name="unsafe_water_leads_to_diseases" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Religion :</label>
+        <select class="form-select" name="religion" required>
+          <option value="">-- Sélectionner --</option>
+          <option value="Catholique">Catholique</option>
+          <option value="Protestant(e)">Protestant(e)</option>
+          <option value="Musulman(e)">Musulman(e)</option>
+          <option value="Témoin de Jéhovah">Témoin de Jéhovah</option>
+          <option value="Kimbanguiste">Kimbanguiste</option>
+        </select>
+      </div>
+    </div>
 
-            <div class="mb-3">
-                <label class="form-label">13. Maladies hydriques connues :</label>
-                <textarea class="form-control border rounded" name="known_waterborne_diseases"></textarea>
-            </div>
+    <!-- ================== II. Connaissance de la population ================== -->
+    <div class="section">
+      <h4 class="section-title" style="color:#f59e0b;">II. Connaissance de la population</h4>
 
-            <div class="mb-3">
-                <label class="form-label">14. Connaissance des traitements de l’eau :</label>
-                <select class="form-select border rounded" name="know_water_treatment" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Avez-vous déjà entendu parler des maladies d’origine hydrique ?</label>
+        <select class="form-select" name="heard_about_waterborne_diseases" required>
+          <option value="">-- Sélectionner --</option>
+          <option value="Oui">Oui</option>
+          <option value="Non">Non</option>
+        </select>
+      </div>
 
-            <div class="mb-3">
-                <label class="form-label">15. Moyens de traitement :</label>
-                <textarea class="form-control border rounded" name="water_treatment_methods"></textarea>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Si oui, par quel canal :</label>
+        <input type="text" class="form-control" name="info_channel">
+      </div>
 
-            <div class="mb-3">
-                <label class="form-label">16. Connaissance lavage des mains :</label>
-                <select class="form-select border rounded" name="know_handwashing_moments" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Connaissance des traitements de l’eau :</label>
+        <select class="form-select" name="know_water_treatment" required>
+          <option value="">-- Sélectionner --</option>
+          <option value="Oui">Oui</option>
+          <option value="Non">Non</option>
+        </select>
+      </div>
+    </div>
 
-            <div class="mb-3">
-                <label class="form-label">17. Si Oui, moments de lavage :</label><br>
-                <input type="checkbox" name="moments_lavage" value="Après la toilette"> Après la toilette<br>
-                <input type="checkbox" name="moments_lavage" value="Avant de manger"> Avant de manger<br>
-                <input type="checkbox" name="moments_lavage" value="Avant la cuisson"> Avant la cuisson<br>
-                <input type="checkbox" name="moments_lavage" value="Après la cuisson"> Après la cuisson<br>
-                <input type="checkbox" name="moments_lavage" value="Avant l’allaitement"> Avant l’allaitement<br>
-            </div>
+    <!-- ================== III. Recours aux mesures ================== -->
+    <div class="section">
+      <h4 class="section-title" style="color:#16a34a;">III. Recours aux mesures</h4>
 
-            <div class="mb-3">
-                <label class="form-label">18. Sensibilisation prévention :</label>
-                <select class="form-select border rounded" name="awareness_on_prevention" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Source principale d’eau :</label>
+        <input type="text" class="form-control" name="water_supply_source" required>
+      </div>
 
-            <div class="mb-3">
-                <label class="form-label">19. Canal de sensibilisation :</label>
-                <input type="text" class="form-control border rounded" name="awareness_channel">
-            </div>
-        </div>
+      <div class="mb-3">
+        <label class="form-label">Eau traitée au point de puisage :</label>
+        <select class="form-select" name="water_treatment_at_source" required>
+          <option value="">-- Sélectionner --</option>
+          <option value="Oui">Oui</option>
+          <option value="Non">Non</option>
+        </select>
+      </div>
+    </div>
 
-        <!-- ================== III. Niveau de recours ================== -->
-        <div class="p-3 mb-4 rounded" style="background-color: #e8f5e9;">
-            <h4 class="text-success mb-3">III. Niveau de recours aux mesures</h4>
+    <!-- ================== IV. Prévalence ================== -->
+    <div class="section">
+      <h4 class="section-title" style="color:#dc2626;">IV. Prévalence</h4>
 
-            <div class="mb-3">
-                <label class="form-label">20. Source principale d’eau :</label>
-                <input type="text" class="form-control border rounded" name="water_supply_source" required>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">L’enfant a-t-il déjà contracté une maladie hydrique :</label>
+        <select class="form-select" name="child_waterborne_disease_contact" required>
+          <option value="">-- Sélectionner --</option>
+          <option value="Oui">Oui</option>
+          <option value="Non">Non</option>
+        </select>
+      </div>
 
-            <div class="mb-3">
-                <label class="form-label">21. Eau traitée au point de puisage :</label>
-                <select class="form-select border rounded" name="water_treatment_at_source" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-            </div>
+      <div class="mb-3">
+        <label class="form-label">Si Oui, laquelle :</label>
+        <input type="text" class="form-control" name="disease_name">
+      </div>
+    </div>
 
-            <div class="mb-3">
-                <label class="form-label">22. Si Oui, comment :</label>
-                <input type="text" class="form-control border rounded" name="water_treatment_method">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">23. Eau traitée avant consommation :</label>
-                <select class="form-select border rounded" name="treat_water_before_consumption" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">24. Moyens de traitement :</label>
-                <input type="text" class="form-control border rounded" name="treatment_methods">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">25. Stockage de l’eau :</label>
-                <input type="text" class="form-control border rounded" name="water_storage">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">26. Participation aux travaux communautaires :</label>
-                <select class="form-select border rounded" name="community_work" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">27. Fréquence de participation :</label>
-                <input type="text" class="form-control border rounded" name="community_work_frequency">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">28. Raison de non-participation :</label>
-                <input type="text" class="form-control border rounded" name="reason_for_not_participating">
-            </div>
-        </div>
-
-        <!-- ================== IV. Prévalence ================== -->
-        <div class="p-3 mb-4 rounded" style="background-color: #fce4ec;">
-            <h4 class="text-danger mb-3">IV. Prévalence des maladies d’origine hydrique</h4>
-
-            <div class="mb-3">
-                <label class="form-label">29. L’enfant a-t-il contacté une maladie hydrique :</label>
-                <select class="form-select border rounded" name="child_waterborne_disease_contact" required>
-                    <option value="">-- Sélectionner --</option>
-                    <option value="Oui">Oui</option>
-                    <option value="Non">Non</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">30. Si Oui, laquelle :</label>
-                <input type="text" class="form-control border rounded" name="disease_name">
-            </div>
-        </div>
-
-        <!-- Bouton soumettre -->
-        <button type="submit" class="btn btn-primary btn-lg w-100">Soumettre</button>
-    </form>
+    <button type="submit" class="btn-submit mt-3">Soumettre</button>
+  </form>
 </div>
 
-<!-- JS pour AJAX et alertes -->
+<!-- Script AJAX -->
 <script>
 $(document).ready(function(){
-    $('#questionnaireForm').on('submit', function(event){
-        event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "{{ url_for('questionnaire') }}",
-            data: $(this).serialize(),
-            success: function(){
-                var alertHtml = '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">'
-                              + 'Réponse enregistrée avec succès !'
-                              + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>'
-                              + '</div>';
-                $('.container').prepend(alertHtml);
-                $('#questionnaireForm')[0].reset();
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-            },
-            error: function(){
-                var alertHtml = '<div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">'
-                              + 'Erreur lors de l’enregistrement !'
-                              + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>'
-                              + '</div>';
-                $('.container').prepend(alertHtml);
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-            }
-        });
+  $('#questionnaireForm').on('submit', function(event){
+    event.preventDefault();
+    $.ajax({
+      type: "POST",
+      url: "{{ url_for('questionnaire') }}",
+      data: $(this).serialize(),
+      success: function(){
+        var alertHtml = '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">'
+                      + '✅ Réponse enregistrée avec succès !'
+                      + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>'
+                      + '</div>';
+        $('.container-form').prepend(alertHtml);
+        $('#questionnaireForm')[0].reset();
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+      },
+      error: function(){
+        var alertHtml = '<div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">'
+                      + '❌ Erreur lors de l’enregistrement !'
+                      + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>'
+                      + '</div>';
+        $('.container-form').prepend(alertHtml);
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+      }
     });
+  });
 });
 </script>
 {% endblock %}
