@@ -149,21 +149,156 @@ def analyse():
             flash("Aucune donnée disponible pour l'analyse.", "warning")
             return redirect(url_for('index'))
 
+        # Convertir en DataFrame
         data = pd.DataFrame([r.__dict__ for r in reponses]).drop('_sa_instance_state', axis=1)
 
-        plt.figure(figsize=(5, 4))
+        plots = {}        # Dictionnaire pour les graphiques
+        tables = {}       # Dictionnaire pour les tableaux
+        commentaires = {} # Dictionnaire pour les commentaires
+
+        # -----------------------------
+        # 1️⃣ Répartition par sexe
+        # -----------------------------
+        tab_sexe = data['gender'].value_counts().reset_index()
+        tab_sexe.columns = ['Sexe', 'Nombre']
+        tables['table_sexe'] = tab_sexe.to_html(index=False)
+
+        commentaires['commentaire_sexe'] = (
+            f"Sur {len(data)} répondants, "
+            f"{tab_sexe.loc[tab_sexe['Sexe']=='Femme', 'Nombre'].values[0]} sont des femmes "
+            f"et {tab_sexe.loc[tab_sexe['Sexe']=='Homme', 'Nombre'].values[0]} sont des hommes."
+        )
+
+        plt.figure(figsize=(5,4))
         sns.countplot(x='gender', data=data, palette='Set2')
-        plt.title("Répartition par sexe des répondants")
+        plt.title("Répartition par sexe")
         plt.xlabel("Sexe")
         plt.ylabel("Nombre de répondants")
-
         img = io.BytesIO()
         plt.tight_layout()
         plt.savefig(img, format='png')
         img.seek(0)
-        plot_url = base64.b64encode(img.getvalue()).decode()
+        plots['plot_sexe'] = base64.b64encode(img.getvalue()).decode()
+        plt.close()
 
-        return render_template('analyse.html', plot_sexe=plot_url)
+        # -----------------------------
+        # 2️⃣ Répartition par niveau d'éducation
+        # -----------------------------
+        tab_edu = data['education_level'].value_counts().reset_index()
+        tab_edu.columns = ['Niveau d’éducation', 'Nombre']
+        tables['table_education'] = tab_edu.to_html(index=False)
+
+        commentaires['commentaire_education'] = (
+            f"La majorité des mères ont un niveau d’éducation {tab_edu.iloc[0,0]} "
+            f"avec {tab_edu.iloc[0,1]} répondants sur {len(data)}."
+        )
+
+        plt.figure(figsize=(6,4))
+        sns.countplot(x='education_level', data=data, palette='Set3', order=tab_edu['Niveau d’éducation'])
+        plt.title("Répartition par niveau d'éducation")
+        plt.xlabel("Niveau d'éducation")
+        plt.ylabel("Nombre de répondants")
+        img = io.BytesIO()
+        plt.tight_layout()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plots['plot_education'] = base64.b64encode(img.getvalue()).decode()
+        plt.close()
+
+        # -----------------------------
+        # 3️⃣ Connaissance des maladies hydriques
+        # -----------------------------
+        tab_connaissance = data['heard_about_waterborne_diseases'].value_counts().reset_index()
+        tab_connaissance.columns = ['Connaît maladies', 'Nombre']
+        tables['table_connaissance'] = tab_connaissance.to_html(index=False)
+
+        commentaires['commentaire_connaissance'] = (
+            f"{tab_connaissance.loc[tab_connaissance['Connaît maladies']=='Oui','Nombre'].values[0]} répondants "
+            f"connaissent les maladies hydriques sur {len(data)}."
+        )
+
+        plt.figure(figsize=(4,4))
+        sns.countplot(x='heard_about_waterborne_diseases', data=data, palette='Set2')
+        plt.title("Connaissance des maladies hydriques")
+        plt.xlabel("Oui / Non")
+        plt.ylabel("Nombre")
+        img = io.BytesIO()
+        plt.tight_layout()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plots['plot_connaissance'] = base64.b64encode(img.getvalue()).decode()
+        plt.close()
+
+        # -----------------------------
+        # 4️⃣ Traitement de l'eau avant consommation
+        # -----------------------------
+        tab_traitement = data['treat_water_before_consumption'].value_counts().reset_index()
+        tab_traitement.columns = ['Traite eau avant consommation', 'Nombre']
+        tables['table_traitement'] = tab_traitement.to_html(index=False)
+
+        commentaires['commentaire_traitement'] = (
+            f"{tab_traitement.loc[tab_traitement['Traite eau avant consommation']=='Oui','Nombre'].values[0]} répondants "
+            f"traitent l'eau avant consommation sur {len(data)}."
+        )
+
+        plt.figure(figsize=(4,4))
+        sns.countplot(x='treat_water_before_consumption', data=data, palette='Set3')
+        plt.title("Traitement de l’eau avant consommation")
+        plt.xlabel("Oui / Non")
+        plt.ylabel("Nombre")
+        img = io.BytesIO()
+        plt.tight_layout()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plots['plot_traitement'] = base64.b64encode(img.getvalue()).decode()
+        plt.close()
+
+        # -----------------------------
+        # 5️⃣ Sources d'eau utilisées (multi-réponse)
+        # -----------------------------
+        sources = ['source_amenee', 'source_non_amenee', 'lac', 'riviere', 'regideso', 'borne_fontaine', 'eau_pluie', 'autres']
+        sources_count = {s: (data[s] == 'Oui').sum() for s in sources}
+        tab_sources = pd.DataFrame(list(sources_count.items()), columns=['Source', 'Nombre'])
+        tables['table_sources'] = tab_sources.to_html(index=False)
+
+        commentaires['commentaire_sources'] = "La source d'eau la plus utilisée est {} avec {} répondants.".format(
+            tab_sources.iloc[0,0], tab_sources.iloc[0,1]
+        )
+
+        plt.figure(figsize=(6,4))
+        sns.barplot(x='Source', y='Nombre', data=tab_sources, palette='Set1')
+        plt.title("Sources d'eau utilisées")
+        plt.ylabel("Nombre de répondants")
+        plt.xticks(rotation=45)
+        img = io.BytesIO()
+        plt.tight_layout()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plots['plot_sources'] = base64.b64encode(img.getvalue()).decode()
+        plt.close()
+
+        # -----------------------------
+        # 6️⃣ Corrélation entre pratiques et connaissances
+        # -----------------------------
+        bin_cols = ['heard_about_waterborne_diseases', 'know_water_treatment', 'know_handwashing_moments', 'treat_water_before_consumption', 'community_work', 'local_water_committee']
+        bin_data = data[bin_cols].replace({'Oui': 1, 'Non': 0})
+        corr = bin_data.corr()
+        tables['table_corr'] = corr.to_html()
+
+        commentaires['commentaire_corr'] = "La heatmap montre les associations entre connaissances et pratiques : valeurs proches de 1 indiquent une forte corrélation positive."
+
+        plt.figure(figsize=(6,5))
+        sns.heatmap(corr, annot=True, cmap='coolwarm')
+        plt.title("Corrélation entre pratiques et connaissances")
+        img = io.BytesIO()
+        plt.tight_layout()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plots['plot_corr'] = base64.b64encode(img.getvalue()).decode()
+        plt.close()
+
+        return render_template('analyse.html', plots=plots, tables=tables, commentaires=commentaires)
+
     except Exception as e:
         flash(f"Erreur lors de l'analyse : {e}", "danger")
         return redirect(url_for('index'))
