@@ -1,9 +1,10 @@
-from app import app, db  # importe l'app Flask et la base de données
+from app import app, db
+from sqlalchemy import text  # ✅ à importer
 
-# On exécute les modifications dans le contexte de l'application
+# On exécute dans le contexte Flask
 with app.app_context():
     with db.engine.connect() as conn:
-        conn.execute("""
+        alter_query = text("""
             ALTER TABLE reponse
             ALTER COLUMN address TYPE VARCHAR(200),
             ALTER COLUMN gender TYPE VARCHAR(50),
@@ -42,6 +43,8 @@ with app.app_context():
             ALTER COLUMN reason_for_not_participating TYPE VARCHAR(300),
             ALTER COLUMN local_water_committee TYPE VARCHAR(50);
         """)
+
+        conn.execute(alter_query)  # ✅ exécution correcte
         conn.commit()
 
-    print("✅ Les colonnes ont été agrandies avec succès sans perte de données.")
+    print("✅ Les colonnes ont été agrandies avec succès !")
