@@ -180,22 +180,74 @@ def export_excel():
             flash("Aucune donnée disponible pour l'export.", "warning")
             return redirect(url_for('tableau'))
 
-        data = pd.DataFrame([r.__dict__ for r in reponses]).drop('_sa_instance_state', axis=1)
+        colonnes = [f"Répondant {r.id}" for r in reponses]
 
+        # Texte de l'en-tête
+        header_text = [
+            ["QUESTIONNAIRE D’ENQUETE ADRESSE AUX RESPONSABLES DES MENAGES/ADULTES DANS LA ZONE DE SANTE D’IBANDA"],
+            ["Nous sommes, NIPOSHO NDOBESA Innocent, étudiant en deuxième année de licence/L2 Santé Publique ancien système (PADE M) à l’Institut Supérieur des Techniques Médicales de Bukavu (ISTM/BUKAVU)."],
+            ["Nous avons trouvé utile de vous soumettre ce présent questionnaire d’enquête de notre travail de fin du deuxième cycle qui traite sur les «Facteurs associés aux maladies d’origines hydriques chez les enfants de 0 à 59 mois » ; afin d’accéder aux données permettant de savoir ceux qui influencent les maladies hydriques chez les enfants de 0 à 59 mois."],
+            [""]  # Ligne vide après l'en-tête
+        ]
+
+        # Construire le tableau des questions et réponses
+        lignes = [
+            ["I. Caractéristique sociodémographique des enquêtés", ""],
+            ["1. Adresse de l’enquêté :", *[r.address for r in reponses]],
+            ["2. Sexe :", *[r.gender for r in reponses]],
+            ["3. Statut matrimonial :", *[r.marital_status for r in reponses]],
+            ["4. Religion :", *[r.religion for r in reponses]],
+            ["5. Niveau d’étude de la mère de ménage :", *[r.education_level for r in reponses]],
+            ["6. Taille de ménage :", *[r.household_size for r in reponses]],
+            ["7. Sexe de l’enfant :", *[r.child_gender for r in reponses]],
+            ["8. Profession de la mère de ménage :", *[r.mother_profession for r in reponses]],
+            ["II. Connaissance de la population face à la prévention des maladies d’origine hydrique", ""],
+            ["9. Avez-vous déjà entendu parler des maladies d’origine hydrique ?", *[r.heard_about_waterborne_diseases for r in reponses]],
+            ["10. Si oui, par quel canal d’information :", *[r.info_channel for r in reponses]],
+            ["11. Que signifie maladie hydrique ?", *[r.waterborne_disease_meaning for r in reponses]],
+            ["12. Pensez-vous que la consommation d’une eau insalubre peut conduire aux maladies hydriques?", *[r.unsafe_water_leads_to_diseases for r in reponses]],
+            ["13. Si oui, maladies que vous connaissez :", *[r.known_waterborne_diseases for r in reponses]],
+            ["14. Connaissez-vous au moins un moyen de traitement de l’eau de consommation ?", *[r.know_water_treatment for r in reponses]],
+            ["15. Si oui, quels moyens de traitement ?", *[r.water_treatment_methods for r in reponses]],
+            ["16. Connaissez-vous les moments clés de lavage des mains ?", *[r.know_handwashing_moments for r in reponses]],
+            ["17. Si oui, lesquels ?", *[r.moments_lavage for r in reponses]],
+            ["18. Avez-vous déjà été sensibilisés sur la prévention des maladies ?", *[r.awareness_on_prevention for r in reponses]],
+            ["19. Si oui, par quel canal ?", *[r.awareness_channel for r in reponses]],
+            ["III. Niveau de recours aux mesures de prévention", ""],
+            ["20. Source principale d’approvisionnement en eau :", *[r.source_amenee for r in reponses]],
+            ["21. Eau traitée au point de puisage ?", *[r.water_treatment_at_source for r in reponses]],
+            ["22. Si oui, comment ?", *[r.water_treatment_method for r in reponses]],
+            ["23. Traitez-vous l’eau avant consommation ?", *[r.treat_water_before_consumption for r in reponses]],
+            ["24. Si oui, par quel moyen ?", *[r.treatment_methods for r in reponses]],
+            ["25. Que faites-vous pour stocker l’eau ?", *[r.water_storage for r in reponses]],
+            ["26. Participez-vous aux travaux communautaires ?", *[r.community_work for r in reponses]],
+            ["27. Si oui, fréquence ?", *[r.community_work_frequency for r in reponses]],
+            ["28. Si non, raison ?", *[r.reason_for_not_participating for r in reponses]],
+            ["IV. Prévalence des maladies d’origine hydrique", ""],
+            ["29. L’enfant avait contacté une maladie ?", *[r.remarks for r in reponses]],
+            ["30. Si oui, laquelle ?", *[r.remarks for r in reponses]],
+        ]
+
+        # Fusionner l'en-tête et les questions
+        df = pd.DataFrame(header_text + lignes)
+
+        # Export Excel
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine="openpyxl") as writer:
-            data.to_excel(writer, index=False, sheet_name="Réponses")
+            df.to_excel(writer, index=False, header=False, sheet_name="Questionnaire")
         output.seek(0)
 
         return send_file(
             output,
             as_attachment=True,
-            download_name="reponses_questionnaire.xlsx",
+            download_name="questionnaire_ibanda.xlsx",
             mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
     except Exception as e:
         flash(f"Erreur lors de l'export Excel : {e}", "danger")
         return redirect(url_for('tableau'))
+)
 
 
 with app.app_context():
